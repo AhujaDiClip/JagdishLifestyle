@@ -215,6 +215,7 @@
     </div>
     <!-- SHUTTER PRE-INTRO: red billboard on top, roll the shutter up to start the intro -->
     <div id="shutter" class="fixed inset-0 z-[400] flex flex-col select-none cursor-grab">
+        <button id="shutter-sound" aria-label="Sound" class="absolute bottom-5 right-4 z-20 bg-white text-vibe font-anton text-lg px-3 py-1 border-4 border-vibe uppercase cursor-pointer"></button>
         <div id="billboard" class="relative z-10 bg-[#b80000] px-3 pt-3 pb-5 shrink-0 shadow-[0_8px_0_#111]">
             <div class="bg-vibe border-8 border-white px-3 pt-3 pb-4 text-center">
                 <div class="bulbs mb-3"></div>
@@ -264,25 +265,35 @@
             setTimeout(function () { el.remove(); }, 1000);
         }
         // --- intro music (starts with the intro; browsers that block autoplay start it on the first tap) ---
-        var music = new Audio('Retro_Brass_Drop.mp3'), snd = document.getElementById('intro-sound'), started = false, userMuted = false, lastTry = 0;
+        var music = new Audio('Retro_Brass_Drop.mp3'), snd = document.getElementById('intro-sound'), ssnd = document.getElementById('shutter-sound'), started = false, userMuted = false, lastTry = 0;
         music.volume = 0.8; music.preload = 'auto';
-        function icon(on) { snd.innerHTML = on ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute mr-2"></i>Tap for sound'; }
+        var tapWord = ('ontouchstart' in window) ? 'Tap' : 'Click';
+        function icon(on) {
+            var h = on ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute mr-2"></i>' + tapWord + ' for sound';
+            snd.innerHTML = h; ssnd.innerHTML = h; ssnd.classList.toggle('animate-pulse', !on);
+        }
         function startMusic(e) {
             if (started || userMuted || done) return;
-            if (e && e.target && e.target.closest && e.target.closest('#intro-skip, #intro-sound')) return;
+            if (e && e.target && e.target.closest && e.target.closest('#intro-skip, #intro-sound, #shutter-sound')) return;
             if (!e) { var now = Date.now(); if (now - lastTry < 400) return; lastTry = now; }
             var p = music.play();
             if (p && p.then) p.then(function () { started = true; if (done) music.pause(); else icon(true); }).catch(function () { icon(false); });
         }
         function fadeOut() {
-            var v = setInterval(function () { music.volume = Math.max(0, music.volume - 0.08); if (music.volume <= 0) { music.pause(); clearInterval(v); } }, 80);
+            var n = 0, v = setInterval(function () {
+                n++; try { music.volume = Math.max(0, 0.8 - n * 0.11); } catch (err) {}   // iPhone ignores volume, so we always pause below
+                if (n >= 7) { clearInterval(v); music.pause(); try { music.currentTime = 0; } catch (err) {} }
+            }, 80);
         }
-        snd.addEventListener('click', function () {
+        function toggleSound(e) {
+            e.stopPropagation();
             if (!music.paused) { userMuted = true; started = false; music.pause(); icon(false); }
             else { userMuted = false; startMusic(); }
-        });
+        }
+        snd.addEventListener('click', toggleSound); ssnd.addEventListener('click', toggleSound);
+        ['pointerdown', 'pointerup'].forEach(function (ev) { ssnd.addEventListener(ev, function (e) { e.stopPropagation(); }); });   // never drags/opens the shutter
         ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, startMusic); });
-        icon(true);
+        icon(false);
         document.getElementById('intro-skip').addEventListener('click', finish);
 
         // --- shutter: roll it up (scroll / swipe / drag / tap / key) to open; music starts as you begin, then the intro plays ---
