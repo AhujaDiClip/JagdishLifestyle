@@ -144,7 +144,14 @@
         /* UI POLISH */
         ::selection { background: #FFD700; color: #e60000; }
         button, a { -webkit-tap-highlight-color: transparent; }
+        button, a[class*="border-4"] { transition: transform .2s ease, filter .2s ease, box-shadow .2s ease, background-color .2s ease, color .2s ease; }
+        :where(button:not(:disabled), a[class*="border-4"]):hover { transform: translateY(-2px); filter: brightness(1.07); }
         button:not(:disabled):active { transform: scale(.97); }
+        /* Deal cards: soft float + light sweep */
+        .deal-fx { --shine: rgba(255,255,255,.22); background-image: linear-gradient(115deg, transparent 40%, var(--shine) 50%, transparent 60%); background-size: 250% 100%; background-repeat: no-repeat; background-position: 150% 0; animation: dealFloat 3.8s ease-in-out infinite, dealShine 5s ease-in-out infinite; animation-delay: var(--d, 0s); }
+        .deal-fx-light { --shine: rgba(255,215,0,.45); }
+        @keyframes dealFloat { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+        @keyframes dealShine { 0%, 55% { background-position: 150% 0; } 85%, 100% { background-position: -50% 0; } }
         a:focus-visible, button:focus-visible, summary:focus-visible { outline: 4px solid #FFD700; outline-offset: 3px; }
         #home, #products { background-image: radial-gradient(rgba(255,255,255,.08) 2px, transparent 2px); background-size: 28px 28px; }
         .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
@@ -195,6 +202,7 @@
         <div class="absolute bottom-0 left-0 w-full h-4 md:h-6 bg-white"></div>
         <div id="intro-line" class="font-anton uppercase leading-[1.05] tracking-wide max-w-5xl"></div>
         <div id="intro-dots" class="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2"></div>
+        <button id="intro-sound" aria-label="Sound" class="absolute top-10 right-5 bg-white text-vibe font-anton text-lg px-3 py-1 border-4 border-vibe uppercase cursor-pointer"></button>
         <button id="intro-skip" class="absolute bottom-10 right-5 bg-white text-vibe font-anton text-xl px-4 py-1 border-4 border-vibe uppercase cursor-pointer">Skip &rsaquo;</button>
     </div>
     <script>
@@ -222,11 +230,30 @@
             }, lines[i][1]);
         }
         function finish() {
-            if (done) return; done = true; clearTimeout(timer);
+            if (done) return; done = true; clearTimeout(timer); fadeOut();
             document.body.style.overflow = '';
             el.classList.add('leave');
             setTimeout(function () { el.remove(); }, 1000);
         }
+        // --- intro music (starts with the intro; browsers that block autoplay start it on the first tap) ---
+        var music = new Audio('Retro_Brass_Drop.mp3'), snd = document.getElementById('intro-sound'), started = false, userMuted = false;
+        music.volume = 0.8; music.preload = 'auto';
+        function icon(on) { snd.innerHTML = on ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute mr-2"></i>Tap for sound'; }
+        function startMusic(e) {
+            if (started || userMuted || done) return;
+            if (e && e.target && e.target.closest && e.target.closest('#intro-skip, #intro-sound')) return;
+            var p = music.play();
+            if (p && p.then) p.then(function () { started = true; if (done) music.pause(); else icon(true); }).catch(function () { icon(false); });
+        }
+        function fadeOut() {
+            var v = setInterval(function () { music.volume = Math.max(0, music.volume - 0.08); if (music.volume <= 0) { music.pause(); clearInterval(v); } }, 80);
+        }
+        snd.addEventListener('click', function () {
+            if (!music.paused) { userMuted = true; started = false; music.pause(); icon(false); }
+            else { userMuted = false; startMusic(); }
+        });
+        ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, startMusic); });
+        icon(true); startMusic();
         document.getElementById('intro-skip').addEventListener('click', finish);
         show();
     })();
@@ -343,7 +370,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16 w-full max-w-6xl">
             
             <!-- Deal 1: BOGO -->
-            <div class="bg-vibe border-8 border-vibe p-8 flex flex-col justify-center items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] h-full">
+            <div class="deal-fx bg-vibe border-8 border-vibe p-8 flex flex-col justify-center items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] h-full">
                 <div class="font-anton text-6xl md:text-8xl text-white uppercase mb-4 leading-none style-red-on-white w-full">
                     BUY 1
                 </div>
@@ -356,7 +383,7 @@
             </div>
 
             <!-- Deal 2: Kitchen Runner -->
-            <div class="bg-white border-8 border-vibe p-8 flex flex-col justify-between items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] relative">
+            <div style="--d:.7s" class="deal-fx deal-fx-light bg-white border-8 border-vibe p-8 flex flex-col justify-between items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] relative">
                 <div class="bg-yellow text-vibe font-anton text-4xl px-8 py-3 mb-6 uppercase border-4 border-vibe w-full">
                     Kitchen Deal
                 </div>
@@ -375,7 +402,7 @@
 
         <!-- VIP UNLOCK SECTION (Firebase) -->
         <div id="vip" class="w-full max-w-5xl mt-20 relative">
-            <div class="relative bg-vibe border-8 border-vibe p-8 md:p-12 shadow-[12px_12px_0px_#FFD700] text-center">
+            <div style="--d:1.4s" class="deal-fx relative bg-vibe border-8 border-vibe p-8 md:p-12 shadow-[12px_12px_0px_#FFD700] text-center">
                 
                 <h2 class="font-anton text-5xl md:text-7xl text-white uppercase mb-8 style-white-on-red bg-yellow border-8 border-vibe inline-block px-8 py-2">
                     VIP EXCLUSIVE OFFER
