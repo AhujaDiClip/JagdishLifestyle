@@ -157,6 +157,14 @@
         .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
         .reveal.in { opacity: 1; transform: none; }
         #admin-fab:hover, #to-top:hover { transform: scale(1.1); }
+        /* SHUTTER PRE-INTRO */
+        #shutter { touch-action: none; transition: transform .9s cubic-bezier(.77,0,.18,1); }
+        #shutter.gone { transform: translateY(-100%); }
+        .slats { background: repeating-linear-gradient(180deg, #d9dde2 0, #b3bac2 16px, #7f8790 25px, #4d545c 28px); box-shadow: inset 0 0 60px rgba(0,0,0,.45); will-change: transform; }
+        .bulbs { height: 12px; background: radial-gradient(circle, #FFD700 38%, transparent 42%) 0 0 / 26px 12px repeat-x; animation: bulb 1.4s ease-in-out infinite; }
+        @keyframes bulb { 50% { opacity: .45; } }
+        @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .85; } 50% { transform: translateY(-12px); opacity: 1; } }
+        .nudge { animation: nudge 1.4s ease-in-out infinite; }
         /* INTRO PAGE */
         #intro { transition: transform .9s cubic-bezier(.77,0,.18,1); }
         #intro.leave { transform: translateY(-100%); }
@@ -205,10 +213,30 @@
         <button id="intro-sound" aria-label="Sound" class="absolute top-10 right-5 bg-white text-vibe font-anton text-lg px-3 py-1 border-4 border-vibe uppercase cursor-pointer"></button>
         <button id="intro-skip" class="absolute bottom-10 right-5 bg-white text-vibe font-anton text-xl px-4 py-1 border-4 border-vibe uppercase cursor-pointer">Skip &rsaquo;</button>
     </div>
+    <!-- SHUTTER PRE-INTRO: red billboard on top, roll the shutter up to start the intro -->
+    <div id="shutter" class="fixed inset-0 z-[400] flex flex-col select-none cursor-grab">
+        <div id="billboard" class="relative z-10 bg-[#b80000] px-3 pt-3 pb-5 shrink-0 shadow-[0_8px_0_#111]">
+            <div class="bg-vibe border-8 border-white px-3 pt-3 pb-4 text-center">
+                <div class="bulbs mb-3"></div>
+                <div class="font-anton uppercase text-white leading-none tracking-wide text-5xl md:text-8xl" style="text-shadow:0 5px 0 rgba(0,0,0,.28)">Jagdish Silk Store</div>
+                <div class="bulbs mt-3"></div>
+            </div>
+        </div>
+        <div class="relative flex-1 overflow-hidden">
+            <div id="slats" class="slats absolute inset-0">
+                <div class="absolute bottom-[10%] left-0 w-full flex flex-col items-center gap-3 px-4">
+                    <div class="nudge text-white text-4xl"><i class="fas fa-chevron-up"></i></div>
+                    <p id="shutter-hint" class="font-anton text-2xl md:text-4xl uppercase text-white bg-black/70 px-5 py-2 tracking-widest">Scroll up to open</p>
+                    <div class="w-40 h-5 rounded bg-neutral-800 border-2 border-neutral-500"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <noscript><style>#shutter, #intro { display: none !important; }</style></noscript>
     <script>
     (function () {
         var el = document.getElementById('intro');
-        if (location.hash) { el.remove(); return; }   // direct links (#deals, #qr, #admin...) skip the intro
+        if (location.hash) { el.remove(); document.getElementById('shutter').remove(); return; }   // direct links (#deals, #qr, #admin...) skip the intro
         document.body.style.overflow = 'hidden';
         var lines = [
             ['<span class="block text-7xl md:text-[9rem] style-red-on-white squeezed-text">Jagdish</span><span class="block text-5xl md:text-[6.5rem] style-red-on-white squeezed-text mt-3">Lifestyle Deals</span>', 2300],
@@ -236,12 +264,13 @@
             setTimeout(function () { el.remove(); }, 1000);
         }
         // --- intro music (starts with the intro; browsers that block autoplay start it on the first tap) ---
-        var music = new Audio('Retro_Brass_Drop.mp3'), snd = document.getElementById('intro-sound'), started = false, userMuted = false;
+        var music = new Audio('Retro_Brass_Drop.mp3'), snd = document.getElementById('intro-sound'), started = false, userMuted = false, lastTry = 0;
         music.volume = 0.8; music.preload = 'auto';
         function icon(on) { snd.innerHTML = on ? '<i class="fas fa-volume-up"></i>' : '<i class="fas fa-volume-mute mr-2"></i>Tap for sound'; }
         function startMusic(e) {
             if (started || userMuted || done) return;
             if (e && e.target && e.target.closest && e.target.closest('#intro-skip, #intro-sound')) return;
+            if (!e) { var now = Date.now(); if (now - lastTry < 400) return; lastTry = now; }
             var p = music.play();
             if (p && p.then) p.then(function () { started = true; if (done) music.pause(); else icon(true); }).catch(function () { icon(false); });
         }
@@ -252,10 +281,45 @@
             if (!music.paused) { userMuted = true; started = false; music.pause(); icon(false); }
             else { userMuted = false; startMusic(); }
         });
-        ['pointerdown', 'keydown'].forEach(function (ev) { document.addEventListener(ev, startMusic); });
-        icon(true); startMusic();
+        ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'].forEach(function (ev) { document.addEventListener(ev, startMusic); });
+        icon(true);
         document.getElementById('intro-skip').addEventListener('click', finish);
-        show();
+
+        // --- shutter: roll it up (scroll / swipe / drag / tap / key) to open; music starts as you begin, then the intro plays ---
+        var sh = document.getElementById('shutter'), slats = document.getElementById('slats'), prog = 0, opened = false, drag = null, idle;
+        document.getElementById('shutter-hint').textContent = 'ontouchstart' in window ? 'Swipe up to open' : 'Scroll up to open';
+        function setP(v, anim) {
+            prog = Math.max(0, Math.min(1, v));
+            slats.style.transition = anim ? 'transform .7s cubic-bezier(.3,.7,.2,1)' : 'none';
+            slats.style.transform = 'translateY(' + (-prog * 100) + '%)';
+        }
+        function openShutter() {
+            if (opened) return; opened = true; setP(1, true);
+            setTimeout(function () { sh.classList.add('gone'); show(); setTimeout(function () { sh.remove(); }, 1000); }, 650);
+        }
+        sh.addEventListener('wheel', function (e) {
+            e.preventDefault(); if (opened) return;
+            if (e.deltaY !== 0) startMusic();
+            setP(prog + e.deltaY / 500, false);
+            clearTimeout(idle);
+            if (prog >= 0.3) openShutter(); else idle = setTimeout(function () { setP(0, true); }, 500);
+        }, { passive: false });
+        sh.addEventListener('pointerdown', function (e) { if (opened) return; drag = { y: e.clientY, p0: prog, moved: false }; sh.setPointerCapture(e.pointerId); });
+        sh.addEventListener('pointermove', function (e) {
+            if (!drag || opened) return;
+            var dy = drag.y - e.clientY;
+            if (Math.abs(dy) > 4) { drag.moved = true; startMusic(); }
+            setP(drag.p0 + dy / (slats.offsetHeight * 0.7), false);
+        });
+        sh.addEventListener('pointerup', function () {
+            if (!drag || opened) return;
+            var d = drag; drag = null;
+            if (!d.moved || prog > 0.3) openShutter(); else setP(0, true);
+        });
+        sh.addEventListener('pointercancel', function () { if (!opened) { drag = null; setP(0, true); } });
+        document.addEventListener('keydown', function (e) {
+            if (!opened && ['ArrowDown', 'ArrowUp', 'PageDown', ' ', 'Enter'].indexOf(e.key) > -1) { e.preventDefault(); openShutter(); }
+        });
     })();
     </script>
 
