@@ -141,6 +141,22 @@
             #qr-page { position: static !important; display: flex !important; }
             .no-print { display: none !important; }
         }
+        /* UI POLISH */
+        ::selection { background: #FFD700; color: #e60000; }
+        button, a { -webkit-tap-highlight-color: transparent; }
+        button:not(:disabled):active { transform: scale(.97); }
+        a:focus-visible, button:focus-visible, summary:focus-visible { outline: 4px solid #FFD700; outline-offset: 3px; }
+        #home, #products { background-image: radial-gradient(rgba(255,255,255,.08) 2px, transparent 2px); background-size: 28px 28px; }
+        .reveal { opacity: 0; transform: translateY(36px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+        .reveal.in { opacity: 1; transform: none; }
+        #admin-fab:hover, #to-top:hover { transform: scale(1.1); }
+        /* INTRO PAGE */
+        #intro { transition: transform .9s cubic-bezier(.77,0,.18,1); }
+        #intro.leave { transform: translateY(-100%); }
+        .intro-line { animation: introIn .6s cubic-bezier(.2,1.1,.3,1) both; }
+        .intro-line.out { animation: introOut .35s ease-in both; }
+        @keyframes introIn { from { opacity: 0; transform: translateY(50px) scale(.94); } to { opacity: 1; transform: none; } }
+        @keyframes introOut { to { opacity: 0; transform: translateY(-40px) scale(1.03); } }
         @keyframes cardIn { from { transform: translateY(90px) scale(.8) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
         .card-welcome { animation: cardIn 1s cubic-bezier(.2,1.2,.3,1) both; }
         /* LOYALTY CARD */
@@ -173,6 +189,49 @@
 </head>
 <body class="font-inter flex flex-col min-h-screen">
 
+    <!-- INTRO PAGE (plays first, then slides up to reveal the website) -->
+    <div id="intro" class="fixed inset-0 z-[300] bg-vibe flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-4 md:h-6 bg-white"></div>
+        <div class="absolute bottom-0 left-0 w-full h-4 md:h-6 bg-white"></div>
+        <div id="intro-line" class="font-anton uppercase leading-[1.05] tracking-wide max-w-5xl"></div>
+        <div id="intro-dots" class="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2"></div>
+        <button id="intro-skip" class="absolute bottom-10 right-5 bg-white text-vibe font-anton text-xl px-4 py-1 border-4 border-vibe uppercase cursor-pointer">Skip &rsaquo;</button>
+    </div>
+    <script>
+    (function () {
+        var el = document.getElementById('intro');
+        if (location.hash) { el.remove(); return; }   // direct links (#deals, #qr, #admin...) skip the intro
+        document.body.style.overflow = 'hidden';
+        var lines = [
+            ['<span class="block text-7xl md:text-[9rem] style-red-on-white squeezed-text">Jagdish</span><span class="block text-5xl md:text-[6.5rem] style-red-on-white squeezed-text mt-3">Lifestyle Deals</span>', 2300],
+            ['<span class="block text-5xl md:text-8xl text-white">We bring</span><span class="block text-6xl md:text-[8.5rem] text-yellow">good offers</span>', 1900],
+            ['<span class="block text-7xl md:text-[10rem] text-yellow">Great</span><span class="block text-7xl md:text-[10rem] text-white">deals</span>', 1900],
+            ['<span class="block text-4xl md:text-7xl text-white">At the</span><span class="block text-5xl md:text-[8.5rem] text-yellow">lowest prices</span>', 1900],
+            ['<span class="block text-4xl md:text-7xl text-white">Your home has some needs.</span><span class="block text-5xl md:text-8xl text-yellow mt-4">We are there to fulfill.</span>', 2800]
+        ];
+        var stage = document.getElementById('intro-line'), dots = document.getElementById('intro-dots'), i = 0, timer, done = false;
+        lines.forEach(function () { var d = document.createElement('span'); dots.appendChild(d); });
+        function show() {
+            if (done) return;
+            stage.innerHTML = '<div class="intro-line">' + lines[i][0] + '</div>';
+            [].forEach.call(dots.children, function (d, k) { d.className = 'w-3 h-3 rounded-full ' + (k === i ? 'bg-yellow' : 'bg-white/40'); });
+            timer = setTimeout(function () {
+                if (i === lines.length - 1) { finish(); return; }
+                stage.firstChild.classList.add('out');
+                timer = setTimeout(function () { i++; show(); }, 350);
+            }, lines[i][1]);
+        }
+        function finish() {
+            if (done) return; done = true; clearTimeout(timer);
+            document.body.style.overflow = '';
+            el.classList.add('leave');
+            setTimeout(function () { el.remove(); }, 1000);
+        }
+        document.getElementById('intro-skip').addEventListener('click', finish);
+        show();
+    })();
+    </script>
+
     <!-- TOP BOGO BAR (Yellow bg, Red text) -->
     <div class="bg-yellow text-vibe py-2 overflow-hidden whitespace-nowrap border-b-8 border-white relative z-50 font-anton flex">
         <div class="animate-marquee flex w-max text-3xl md:text-5xl tracking-widest uppercase">
@@ -195,11 +254,14 @@
         <!-- Top Right Profile/Login -->
         <div class="absolute top-4 right-4 z-50 flex flex-col items-end">
             <button id="top-login-btn" class="bg-yellow text-vibe font-anton px-6 py-2 border-4 border-vibe shadow-[4px_4px_0px_#ffffff] uppercase text-2xl hover:bg-white transition-colors cursor-pointer">LOGIN</button>
-            <div id="top-profile-card" class="hidden bg-white border-4 border-vibe p-4 shadow-[8px_8px_0px_#FFD700] text-right mt-2 transform origin-top-right transition-all">
-                <p class="font-anton text-vibe text-3xl uppercase leading-none mb-1" id="profile-name-display">Name</p>
-                <p class="font-black text-vibe text-lg uppercase tracking-widest border-b-2 border-vibe pb-1 mb-3" id="profile-city-display">City</p>
-                <button id="open-dashboard-btn" class="text-sm bg-yellow text-vibe border-2 border-vibe px-3 py-2 uppercase font-bold hover:bg-vibe hover:text-white transition-colors w-full cursor-pointer mb-2">MY DASHBOARD</button>
-                <button id="logout-btn" class="text-sm bg-vibe text-white px-3 py-2 uppercase font-bold hover:bg-black transition-colors w-full cursor-pointer">SWITCH ACCOUNT</button>
+            <div id="top-profile-card" class="hidden relative">
+                <button id="profile-avatar" aria-label="My account" class="w-12 h-12 rounded-full bg-yellow text-vibe border-4 border-vibe shadow-[3px_3px_0px_#ffffff] font-anton text-2xl uppercase flex items-center justify-center cursor-pointer">J</button>
+                <div id="profile-menu" class="hidden absolute right-0 top-full mt-2 w-56 bg-white border-4 border-vibe p-4 shadow-[6px_6px_0px_#FFD700] text-right z-50">
+                    <p class="font-anton text-vibe text-2xl uppercase leading-none mb-1" id="profile-name-display">Name</p>
+                    <p class="font-black text-vibe text-base uppercase tracking-widest border-b-2 border-vibe pb-1 mb-3" id="profile-city-display">City</p>
+                    <button id="open-dashboard-btn" class="text-sm bg-yellow text-vibe border-2 border-vibe px-3 py-2 uppercase font-bold hover:bg-vibe hover:text-white transition-colors w-full cursor-pointer mb-2">MY DASHBOARD</button>
+                    <button id="logout-btn" class="text-sm bg-vibe text-white px-3 py-2 uppercase font-bold hover:bg-black transition-colors w-full cursor-pointer">SWITCH ACCOUNT</button>
+                </div>
             </div>
         </div>
 
@@ -399,16 +461,6 @@
         <a href="https://maps.google.com/?q=Jagdish+Silk+Store+Sarafan+Bazar+Phagwara" target="_blank" class="font-anton text-3xl md:text-5xl bg-white text-vibe py-6 px-12 border-8 border-vibe hover:bg-black hover:text-white transition-colors uppercase w-full max-w-md shadow-[8px_8px_0px_#ffffff]">
             GET DIRECTIONS
         </a>
-        <div class="mt-12 flex flex-wrap justify-center gap-3 max-w-3xl">
-            <div class="w-full flex justify-center mb-2"><p class="font-anton text-4xl md:text-5xl uppercase text-white style-white-on-red bg-yellow px-6 py-2 border-4 border-white">Quick Links</p></div>
-            <a href="#home" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Home</a>
-            <a href="#products" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">What We Have</a>
-            <a href="#deals" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Deals</a>
-            <a href="#vip" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">VIP Offer</a>
-            <a href="#contact" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Contact</a>
-            <a href="#visit" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Visit Us</a>
-            <a href="#qr" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors"><i class="fas fa-qrcode mr-2"></i>Scan &amp; Share</a>
-        </div>
     </footer>
 
     <!-- LOGIN / REGISTER MODAL -->
@@ -519,9 +571,10 @@
     <!-- COUNTER QR PAGE (#qr) -->
     <div id="qr-page" class="fixed inset-0 z-[130] bg-white hidden overflow-y-auto flex-col items-center text-center p-6">
         <h2 class="font-anton text-7xl md:text-9xl text-vibe uppercase leading-none mt-4">AAAJAOO</h2>
-        <p class="font-anton text-4xl md:text-6xl text-vibe uppercase mt-2">Scan &amp; Join</p>
+        <p id="qr-head" class="font-anton text-4xl md:text-6xl text-vibe uppercase mt-2">Scan &amp; Join</p>
+        <div class="no-print w-full max-w-xl mt-4"><p class="font-black text-vibe text-sm uppercase mb-2">QR opens:</p><div id="qr-chips" class="flex flex-wrap justify-center gap-2"></div></div>
         <div id="qr-code" class="border-8 border-vibe p-4 mt-6 bg-white inline-block"></div>
-        <p class="font-black text-vibe text-xl md:text-3xl uppercase mt-6 max-w-xl">Get your VIP loyalty card &amp; exclusive deals</p>
+        <p id="qr-tag" class="font-black text-vibe text-xl md:text-3xl uppercase mt-6 max-w-xl">Get your VIP loyalty card &amp; exclusive deals</p>
         <p id="qr-url" class="font-bold text-vibe text-sm mt-2 break-all"></p>
         <p class="font-anton text-vibe text-3xl mt-2">JAGDISH SILK STORE &middot; +91 9815068679</p>
         <div class="no-print flex gap-3 mt-6 mb-6">
@@ -575,11 +628,16 @@
                     </div>
                     <div class="flex gap-2">
                         <button type="submit" class="flex-1 bg-vibe text-white font-anton text-xl py-2 uppercase cursor-pointer">Save changes</button>
+                        <a id="ae-wa" href="#" target="_blank" rel="noopener" class="bg-[#25D366] text-white font-anton text-xl px-4 py-2 uppercase flex items-center"><i class="fab fa-whatsapp mr-2"></i>WhatsApp</a>
                         <button type="button" id="ae-cancel" class="bg-white text-vibe font-anton text-xl px-4 py-2 border-4 border-vibe uppercase cursor-pointer">Close</button>
                     </div>
                     <p id="ae-msg" class="font-black uppercase"></p>
                 </form>
                 <div id="admin-list" class="bg-white text-vibe max-h-[50vh] overflow-y-auto border-4 border-white"></div>
+                <details class="mt-4 bg-white text-vibe border-4 border-yellow">
+                    <summary class="font-anton text-xl uppercase p-3 cursor-pointer">Share links</summary>
+                    <div id="share-links" class="p-3 flex flex-col gap-2"></div>
+                </details>
             </div>
         </div>
     </div>
@@ -675,6 +733,7 @@
             $('card-login').innerText = fmtDay(p.lastLogin);
             $('card-joined').innerText = fmtDay(p.joined);
             $('profile-name-display').innerText = p.name; $('profile-city-display').innerText = p.city;
+            $('profile-avatar').innerText = (p.name.trim()[0] || 'J').toUpperCase();
             $('card-points').innerText = typeof p.points === 'number' ? p.points.toLocaleString('en-IN') : '-';
         }
         function closeDashboard() {
@@ -715,6 +774,9 @@
         }
 
         $('open-dashboard-btn').addEventListener('click', openDashboard);
+        $('profile-avatar').addEventListener('click', (e) => { e.stopPropagation(); $('profile-menu').classList.toggle('hidden'); });
+        $('profile-menu').addEventListener('click', (e) => { if (e.target.closest('button')) $('profile-menu').classList.add('hidden'); });
+        document.addEventListener('click', (e) => { if (!$('top-profile-card').contains(e.target)) $('profile-menu').classList.add('hidden'); });
         $('close-dashboard-btn').addEventListener('click', closeDashboard);
         loyaltyCard.addEventListener('click', () => loyaltyCard.classList.toggle('flipped'));
         $('staff-toggle-btn').addEventListener('click', () => { staffForm.classList.toggle('hidden'); staffForm.classList.toggle('flex'); });
@@ -765,7 +827,13 @@
         pushBtn.addEventListener('click', () => enablePush(true));
 
         // --- ADMIN PANEL ---
+        const waLink = (r) => 'https://wa.me/91' + String(r.phone).replace(/\D/g, '').slice(-10) + '?text=' + encodeURIComponent('Hi ' + (r.name || '').trim());
         const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const SHARE_PAGES = [['', 'Whole Site'], ['products', 'What We Have'], ['deals', 'Deals'], ['vip', 'VIP Offer'], ['contact', 'Contact'], ['visit', 'Visit Us'], ['qr', 'Counter QR poster'], ['admin', 'Admin login (only for you)']];
+        function renderShareLinks() {
+            const base = location.href.split('#')[0];
+            $('share-links').innerHTML = SHARE_PAGES.map(([h, label]) => { const url = base + (h ? '#' + h : ''); return `<div class="flex items-center gap-2"><span class="font-anton text-lg uppercase flex-1 min-w-0 truncate">${label}</span><button data-copy="${esc(url)}" class="bg-vibe text-white font-anton px-3 py-1 uppercase cursor-pointer">Copy</button><a href="https://wa.me/?text=${encodeURIComponent(url)}" target="_blank" rel="noopener" title="Share on WhatsApp" class="bg-[#25D366] text-white px-3 py-2 flex items-center"><i class="fab fa-whatsapp"></i></a></div>`; }).join('');
+        }
         const adminModal = $('admin-modal'), editForm = $('admin-edit');
         let adminPass = '', adminRows = [], editPhone = '';
         const toggle = (el, on, cls = 'flex') => { el.classList.toggle('hidden', !on); el.classList.toggle(cls, on); };
@@ -793,15 +861,20 @@
         function adminRender() {
             const q = $('admin-search').value.trim().toLowerCase();
             const rows = adminRows.filter((r) => !q || (r.name + r.phone + r.city).toLowerCase().includes(q)).slice().reverse();
-            $('admin-list').innerHTML = rows.length ? rows.map((r) => `<div data-phone="${esc(r.phone)}" class="flex items-center justify-between gap-3 p-3 border-b-2 border-gray-200 hover:bg-yellow cursor-pointer"><div class="min-w-0"><p class="font-anton text-xl uppercase truncate">${esc(r.name) || '(no name)'}</p><p class="font-bold text-sm">${esc(r.phone)} &middot; ${esc(r.city)} &middot; DOB ${esc(fmtDob(r.dob))}</p><p class="text-xs font-bold opacity-60">Last login ${esc(fmtDay(r.lastLogin))} &middot; ${esc(r.visits)} visits</p></div><div class="font-anton text-3xl shrink-0">${esc(r.points)}</div></div>`).join('') : '<p class="p-4 font-bold">No customers found</p>';
+            $('admin-list').innerHTML = rows.length ? rows.map((r) => `<div data-phone="${esc(r.phone)}" class="flex items-center justify-between gap-3 p-3 border-b-2 border-gray-200 hover:bg-yellow cursor-pointer"><div class="min-w-0"><p class="font-anton text-xl uppercase truncate">${esc(r.name) || '(no name)'}</p><p class="font-bold text-sm">${esc(r.phone)} &middot; ${esc(r.city)} &middot; DOB ${esc(fmtDob(r.dob))}</p><p class="text-xs font-bold opacity-60">Last login ${esc(fmtDay(r.lastLogin))} &middot; ${esc(r.visits)} visits</p></div><div class="flex items-center gap-3 shrink-0"><a href="${esc(waLink(r))}" target="_blank" rel="noopener" title="WhatsApp" class="w-10 h-10 rounded-full bg-[#25D366] text-white flex items-center justify-center text-xl"><i class="fab fa-whatsapp"></i></a><span class="font-anton text-3xl">${esc(r.points)}</span></div></div>`).join('') : '<p class="p-4 font-bold">No customers found</p>';
         }
         async function adminLoad() {
             const res = await sheetsCall({ action: 'adminList', password: adminPass });
-            if (res.ok) { adminRows = res.rows; $('admin-sheet').href = res.sheetUrl; adminSummary(); adminRender(); if (res.settings) { siteSettings = res.settings; renderBanner(); adminFestival(); $('af-text').value = siteSettings.festivalMsg || ''; } }
+            if (res.ok) { adminRows = res.rows; $('admin-sheet').href = res.sheetUrl; adminSummary(); adminRender(); renderShareLinks(); if (res.settings) { siteSettings = res.settings; renderBanner(); adminFestival(); $('af-text').value = siteSettings.festivalMsg || ''; } }
             return res;
         }
         const adminPut = (r) => { const i = adminRows.findIndex((x) => x.phone === r.phone); if (i > -1) adminRows[i] = r; adminSummary(); adminRender(); };
 
+        $('share-links').addEventListener('click', async (e) => {
+            const b = e.target.closest('[data-copy]'); if (!b) return;
+            try { await navigator.clipboard.writeText(b.dataset.copy); b.innerText = 'Copied'; } catch (err) { prompt('Copy this link:', b.dataset.copy); }
+            setTimeout(() => { b.innerText = 'Copy'; }, 1500);
+        });
         $('admin-fab').addEventListener('click', () => toggle(adminModal, true));
         $('admin-close').addEventListener('click', adminClose);
         $('admin-search').addEventListener('input', adminRender);
@@ -814,9 +887,10 @@
             else { adminPass = ''; $('admin-msg').innerText = res.error || 'Failed'; }
         });
         $('admin-list').addEventListener('click', (e) => {
+            if (e.target.closest('a')) return;
             const row = e.target.closest('[data-phone]'); if (!row) return;
             const r = adminRows.find((x) => x.phone === row.dataset.phone); if (!r) return;
-            editPhone = r.phone; $('ae-phone').innerText = r.phone; $('ae-msg').innerText = '';
+            editPhone = r.phone; $('ae-wa').href = waLink(r); $('ae-phone').innerText = r.phone; $('ae-msg').innerText = '';
             $('ae-name').value = r.name; $('ae-city').value = r.city; $('ae-points').value = r.points; $('ae-bill').value = '';
             $('ae-dob').value = /^\d{4}-\d{2}-\d{2}$/.test(r.dob) ? r.dob : '';
             toggle(editForm, true); editForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -880,12 +954,24 @@
         (async () => { const res = await sheetsCall({ action: 'getSettings' }); if (res.ok) { siteSettings = res; renderBanner(); } })();
 
         // --- COUNTER QR PAGE + PAGE LINKS (#home #products #deals #vip #contact #visit #qr) ---
-        function openQr() {
-            const url = location.href.split('#')[0], box = $('qr-code');
-            $('qr-url').innerText = url; box.innerHTML = '';
+        const QR_TARGETS = [
+            ['', 'Whole Site', 'Scan & Join', 'Get your VIP loyalty card & exclusive deals'],
+            ['products', 'What We Have', 'Scan & Explore', 'See everything we have in store'],
+            ['deals', 'Deals', 'Scan for Deals', 'The best offers at Jagdish Silk Store'],
+            ['vip', 'VIP Offer', 'Scan & Join', 'Unlock your VIP offer'],
+            ['contact', 'Contact', 'Scan to Connect', 'Call or WhatsApp us anytime'],
+            ['visit', 'Visit Us', 'Scan to Visit', 'Get directions to our store']
+        ];
+        let qrTarget = '';
+        function drawQr() {
+            const t = QR_TARGETS.find((x) => x[0] === qrTarget) || QR_TARGETS[0];
+            const url = location.href.split('#')[0] + (t[0] ? '#' + t[0] : ''), box = $('qr-code');
+            $('qr-url').innerText = url; $('qr-head').innerText = t[2]; $('qr-tag').innerText = t[3]; box.innerHTML = '';
             if (window.QRCode) new QRCode(box, { text: url, width: 300, height: 300, colorDark: '#7a0000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
-            toggle($('qr-page'), true);
+            $('qr-chips').innerHTML = QR_TARGETS.map((x) => `<button data-t="${x[0]}" class="font-anton text-lg px-3 py-1 border-4 border-vibe uppercase cursor-pointer ${x[0] === qrTarget ? 'bg-vibe text-white' : 'bg-white text-vibe'}">${x[1]}</button>`).join('');
         }
+        function openQr() { drawQr(); toggle($('qr-page'), true); }
+        $('qr-chips').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (b) { qrTarget = b.dataset.t; drawQr(); } });
         const closeQr = () => toggle($('qr-page'), false);
         $('qr-print').addEventListener('click', () => window.print());
         $('qr-close').addEventListener('click', () => { history.replaceState(null, '', location.pathname + location.search); closeQr(); });
@@ -1145,5 +1231,30 @@
             });
         }
     </script>
+    <!-- Back to top -->
+    <button id="to-top" aria-label="Back to top" class="fixed bottom-3 left-3 z-[90] w-10 h-10 rounded-full bg-white text-vibe border-2 border-vibe shadow-[3px_3px_0px_#FFD700] opacity-0 pointer-events-none transition-all duration-300 cursor-pointer"><i class="fas fa-arrow-up"></i></button>
+    <script>
+    (function () {
+        // sections fade and rise as they scroll into view
+        if ('IntersectionObserver' in window) {
+            var io = new IntersectionObserver(function (es) {
+                es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+            }, { threshold: 0.05 });
+            ['#products > div', '#deals > *', '#vip', '#contact > *', '#visit > *'].forEach(function (q) {
+                [].forEach.call(document.querySelectorAll(q), function (el) { el.classList.add('reveal'); io.observe(el); });
+            });
+        }
+        var t = document.getElementById('to-top');
+        addEventListener('scroll', function () {
+            var on = scrollY > 700;
+            t.classList.toggle('opacity-0', !on); t.classList.toggle('pointer-events-none', !on);
+        }, { passive: true });
+        t.addEventListener('click', function () { scrollTo({ top: 0, behavior: 'smooth' }); });
+    })();
+    </script>
 </body>
 </html>
+
+
+
+
