@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jagdish Silk Store | Sarafan Bazar, Phagwara</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vibe: '#e60000',     // Vibrant Red
+                        white: '#ffffff',    // Pure White
+                        yellow: '#FFD700',   // Deal Yellow (3rd Color)
+                    },
+                    fontFamily: {
+                        anton: ['Anton', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'marquee': 'marquee 25s linear infinite',
+                        'marquee-reverse': 'marquee-reverse 50s linear infinite',
+                        'bounce-slight': 'bounceSlight 1s infinite alternate ease-in-out',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        'marquee-reverse': {
+                            '0%': { transform: 'translateX(-50%)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        bounceSlight: {
+                            '0%': { transform: 'scale(1)' },
+                            '100%': { transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.6.0/confetti.browser.min.js"></script>
+    <!-- QR code generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #e60000; /* Pure Vibe Red */
+            color: #ffffff;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* INSTAGRAM SQUEEZE STYLE OUTLINES */
+        .style-red-on-white {
+            color: #e60000;
+            -webkit-text-stroke: 2.5px #ffffff;
+            text-shadow: none;
+        }
+
+        .style-white-on-red {
+            color: #ffffff;
+            -webkit-text-stroke: 2.5px #e60000;
+            text-shadow: none;
+        }
+        
+        .style-yellow-on-red {
+            color: #FFD700;
+            -webkit-text-stroke: 2.5px #e60000;
+            text-shadow: none;
+        }
+
+        @media (min-width: 768px) {
+            .style-red-on-white {
+                -webkit-text-stroke: 5px #ffffff;
+            }
+            .style-white-on-red {
+                -webkit-text-stroke: 5px #e60000;
+            }
+            .style-yellow-on-red {
+                -webkit-text-stroke: 5px #e60000;
+            }
+        }
+
+        /* Hard Borders & Shadows for Poster Vibe */
+        .poster-border-white { border: 8px solid #ffffff; }
+        .poster-border-red { border: 8px solid #e60000; }
+        
+        .sticker-shadow-white { box-shadow: 12px 12px 0px #ffffff; }
+        .sticker-shadow-red { box-shadow: 12px 12px 0px #e60000; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #ffffff; }
+        ::-webkit-scrollbar-thumb { background: #e60000; border: 2px solid #ffffff; }
+
+        .squeezed-text {
+            transform: scaleY(1.15); /* Reduced scale to fix layout overlap glitches */
+            display: inline-block;
+            transform-origin: center;
+        }
+        
+        .insta-bubble {
+            transition: all 0.2s ease-in-out;
+        }
+        .insta-bubble:hover {
+            transform: scale(1.05) rotate(-2deg);
+            color: #FFD700;
+            -webkit-text-stroke: 2px #ffffff;
+        }
+
+        /* Animated Striped Divider */
+        .bg-stripes-animated {
+            background-image: repeating-linear-gradient(45deg, #e60000 25%, #ffffff 25%, #ffffff 50%, #e60000 50%, #e60000 75%, #ffffff 75%, #ffffff 100%);
+            background-size: 56px 56px;
+            animation: moveStripes 2s linear infinite;
+        }
+        @keyframes moveStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 56px 0; }
+        }
+
+        html { scroll-behavior: smooth; }
+        @media print {
+            body > *:not(#qr-page) { display: none !important; }
+            #qr-page { position: static !important; display: flex !important; }
+            .no-print { display: none !important; }
+        }
+        @keyframes cardIn { from { transform: translateY(90px) scale(.8) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
+        .card-welcome { animation: cardIn 1s cubic-bezier(.2,1.2,.3,1) both; }
+        /* LOYALTY CARD */
+        .card-scene{container-type:inline-size;width:100%;max-width:420px;margin:0 auto;perspective:1200px}
+        .loyalty-card{position:relative;width:100%;aspect-ratio:1.586/1;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,.2,.2,1);cursor:pointer}
+        .loyalty-card.flipped{transform:rotateY(180deg)}
+        .card-face{position:absolute;inset:0;box-sizing:border-box;display:flex;flex-direction:column;border-radius:5cqw;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 2cqw 5cqw rgba(0,0,0,.45)}
+        .card-front{padding:5cqw 5.5cqw;justify-content:space-between;color:#fff;border:1cqw solid #fff;background:radial-gradient(circle at 90% 0%,rgba(255,215,0,.4),transparent 45%),repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 2cqw,transparent 2cqw 4cqw),linear-gradient(135deg,#ff2a2a,#e60000 50%,#9c0000)}
+        .card-front::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);background-size:250% 100%;animation:cardShine 4s ease-in-out infinite}
+        @keyframes cardShine{0%{background-position:150% 0}60%,100%{background-position:-50% 0}}
+        .card-back{transform:rotateY(180deg);background:#fff;color:#e60000;border:1cqw solid #e60000}
+        .cf-row{display:flex;justify-content:space-between;align-items:flex-start}
+        .cf-brand{font-family:Anton,sans-serif;font-size:7.5cqw;line-height:1;letter-spacing:.08em}
+        .cf-sub{font-size:2.1cqw;font-weight:900;letter-spacing:.25em;margin-top:1cqw;color:#FFD700}
+        .cf-vip{background:#FFD700;color:#e60000;font-family:Anton,sans-serif;font-size:4cqw;padding:.6cqw 3cqw;border-radius:1.5cqw;letter-spacing:.1em}
+        .cf-chip{width:11cqw;height:8cqw;border-radius:1.6cqw;background:linear-gradient(135deg,#ffe97a,#d9a400);box-shadow:inset 0 0 0 .3cqw rgba(0,0,0,.25)}
+        .cf-phone{font-size:6.4cqw;font-weight:900;letter-spacing:.14em;text-shadow:0 .4cqw 0 rgba(0,0,0,.25)}
+        .cf-name{font-family:Anton,sans-serif;font-size:6.5cqw;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cf-info{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2cqw}
+        .cf-info small{display:block;font-size:1.9cqw;font-weight:900;letter-spacing:.18em;color:#FFD700}
+        .cf-info b{display:block;font-size:3.3cqw;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .cb-stripe{height:11cqw;background:#111;margin-top:4cqw}
+        .cb-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5cqw}
+        .cb-label{font-size:2.8cqw;font-weight:900;letter-spacing:.3em}
+        .cb-points{font-family:Anton,sans-serif;font-size:17cqw;line-height:1;background:#FFD700;border:.8cqw solid #e60000;border-radius:3cqw;padding:1cqw 7cqw;box-shadow:1.2cqw 1.2cqw 0 #e60000}
+        .cb-note{font-size:2.4cqw;font-weight:900;letter-spacing:.15em}
+        .cb-foot{display:flex;justify-content:space-between;align-items:center;padding:0 5cqw 3.5cqw;font-size:2.2cqw;font-weight:900;letter-spacing:.12em}
+        .cb-aaj{font-family:Anton,sans-serif;font-size:3.6cqw}
+    </style>
+</head>
+<body class="font-inter flex flex-col min-h-screen">
+
+    <!-- TOP BOGO BAR (Yellow bg, Red text) -->
+    <div class="bg-yellow text-vibe py-2 overflow-hidden whitespace-nowrap border-b-8 border-white relative z-50 font-anton flex">
+        <div class="animate-marquee flex w-max text-3xl md:text-5xl tracking-widest uppercase">
+            <span class="px-4">🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥 AAAJAOO 🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥</span>
+            <span class="px-4">🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥 AAAJAOO 🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥</span>
+            <span class="px-4">🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥 AAAJAOO 🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥</span>
+            <span class="px-4">🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥 AAAJAOO 🔥 BUY ONE GET ONE ON ALMOST EVERYTHING 🔥</span>
+        </div>
+    </div>
+
+    <!-- FESTIVAL BANNER (admin turns it ON/OFF) -->
+    <div id="festival-banner" class="hidden bg-white text-vibe text-center py-3 px-4 border-b-8 border-vibe relative z-50">
+        <p id="fb-title" class="font-anton text-3xl md:text-5xl uppercase tracking-wide"></p>
+        <p id="fb-msg" class="font-black text-lg md:text-2xl uppercase"></p>
+    </div>
+
+    <!-- HERO SECTION -->
+    <header id="home" class="bg-vibe pt-16 pb-12 px-4 relative overflow-hidden flex flex-col items-center">
+        
+        <!-- Top Right Profile/Login -->
+        <div class="absolute top-4 right-4 z-50 flex flex-col items-end">
+            <button id="top-login-btn" class="bg-yellow text-vibe font-anton px-6 py-2 border-4 border-vibe shadow-[4px_4px_0px_#ffffff] uppercase text-2xl hover:bg-white transition-colors cursor-pointer">LOGIN</button>
+            <div id="top-profile-card" class="hidden bg-white border-4 border-vibe p-4 shadow-[8px_8px_0px_#FFD700] text-right mt-2 transform origin-top-right transition-all">
+                <p class="font-anton text-vibe text-3xl uppercase leading-none mb-1" id="profile-name-display">Name</p>
+                <p class="font-black text-vibe text-lg uppercase tracking-widest border-b-2 border-vibe pb-1 mb-3" id="profile-city-display">City</p>
+                <button id="open-dashboard-btn" class="text-sm bg-yellow text-vibe border-2 border-vibe px-3 py-2 uppercase font-bold hover:bg-vibe hover:text-white transition-colors w-full cursor-pointer mb-2">MY DASHBOARD</button>
+                <button id="logout-btn" class="text-sm bg-vibe text-white px-3 py-2 uppercase font-bold hover:bg-black transition-colors w-full cursor-pointer">SWITCH ACCOUNT</button>
+            </div>
+        </div>
+
+        <!-- Main Brand Title -->
+        <div class="font-anton flex flex-col items-center justify-center text-center z-10 w-full max-w-6xl leading-[1.1] tracking-wide uppercase mt-12 md:mt-4">
+            <h1 class="text-7xl md:text-[9rem] lg:text-[11rem] style-red-on-white mb-2 squeezed-text w-full">
+                JAGDISH
+            </h1>
+            <h1 class="text-6xl md:text-[7rem] lg:text-[9rem] style-red-on-white mt-2 inline-block w-full squeezed-text">
+                LIFESTYLE DEALS
+            </h1>
+        </div>
+
+        <!-- Aaajaoo Call to Action -->
+        <div class="mt-16 w-full flex flex-col items-center z-20">
+            <div class="w-full bg-white h-4 md:h-6 mb-4 md:mb-6"></div>
+            <h2 id="hero-aaajaoo" class="font-anton text-7xl md:text-[10rem] lg:text-[12rem] uppercase leading-none style-white-on-red squeezed-text drop-shadow-[0_10px_0px_rgba(0,0,0,0.1)] transition-transform duration-75 ease-out cursor-default">
+                AAAJAOO
+            </h2>
+            <div class="w-full bg-white h-4 md:h-6 mt-4 md:mt-6"></div>
+        </div>
+    </header>
+
+    <!-- MASSIVE INVENTORY MARQUEE (Red BG, White Text) -->
+    <div class="bg-vibe text-white py-4 overflow-hidden whitespace-nowrap border-y-8 border-white relative z-40 font-anton flex">
+        <div class="animate-marquee-reverse flex w-max text-4xl md:text-6xl tracking-widest uppercase style-red-on-white">
+            <span class="px-4">• BEDSHEETS • BLANKETS • AC COMFORTERS • COMFORTER SETS • CURTAINS • PILLOWS • SOFA COVERS • SOFA THROWS • BLANKET BEDSHEET SETS • RAZAI • RAZAI BEDSHEET SETS • RAZAI COVERS (GLAUF) • CARPETS • MATS • KITCHEN RUNNERS • FLOOR RUNNERS • BED RUNNERS • CENTER TABLE COVERS • DINING TABLE COVERS • DIWAN SETS • TOWELS</span>
+            <span class="px-4">• BEDSHEETS • BLANKETS • AC COMFORTERS • COMFORTER SETS • CURTAINS • PILLOWS • SOFA COVERS • SOFA THROWS • BLANKET BEDSHEET SETS • RAZAI • RAZAI BEDSHEET SETS • RAZAI COVERS (GLAUF) • CARPETS • MATS • KITCHEN RUNNERS • FLOOR RUNNERS • BED RUNNERS • CENTER TABLE COVERS • DINING TABLE COVERS • DIWAN SETS • TOWELS</span>
+        </div>
+    </div>
+
+    <!-- WHAT WE HAVE SECTION (Redesigned to match Vibe screenshots) -->
+    <section id="products" class="bg-vibe pt-16 pb-20 px-4 border-b-8 border-white flex flex-col items-center w-full relative z-30">
+        
+        <!-- Insta-style callout -->
+        <div class="flex flex-col items-center text-center text-white font-anton uppercase text-4xl md:text-5xl lg:text-6xl mb-12 leading-[1.2] tracking-wide w-full">
+            <p class="mb-4">Address link in bottom</p>
+            <div class="mb-4 bg-white px-8 py-2 border-4 border-vibe transform -rotate-1 shadow-[8px_8px_0px_#FFD700]">
+                <h2 class="font-anton text-6xl md:text-[6rem] lg:text-[7rem] uppercase style-red-on-white leading-none">
+                    WHAT WE HAVE
+                </h2>
+            </div>
+            <p class="mt-2 text-3xl md:text-4xl">for details</p>
+        </div>
+        
+        <!-- Cleaned Up Inventory Grid -->
+        <div class="w-full max-w-7xl bg-vibe border-8 border-white p-8 md:p-12 shadow-[16px_16px_0px_#ffffff]">
+            <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Bedsheets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Blankets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">AC Comforters</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Comforter Sets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Curtains</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Pillows</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Sofa Covers</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Sofa Throws</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Blanket Bedsheet Sets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Razai</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Razai Sets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Razai Covers</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Carpets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Mats</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Kitchen Runners</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Floor Runners</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Bed Runners</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Table Covers</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Diwan Sets</button>
+                <button class="bg-white text-vibe font-anton text-2xl md:text-3xl px-6 py-3 border-4 border-vibe shadow-[6px_6px_0px_#e60000] hover:bg-yellow hover:-translate-y-2 hover:shadow-[6px_10px_0px_#e60000] transition-all uppercase cursor-pointer">Towels</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Animated UI Divider -->
+    <div class="h-8 w-full bg-stripes-animated border-b-8 border-white"></div>
+
+    <!-- MAIN DEALS CONTENT -->
+    <main id="deals" class="flex-grow flex flex-col items-center py-16 px-4 bg-white border-b-8 border-white">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 w-full max-w-6xl">
+            
+            <!-- Deal 1: BOGO -->
+            <div class="bg-vibe border-8 border-vibe p-8 flex flex-col justify-center items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] h-full">
+                <div class="font-anton text-6xl md:text-8xl text-white uppercase mb-4 leading-none style-red-on-white w-full">
+                    BUY 1
+                </div>
+                <div class="font-anton text-6xl md:text-8xl text-white uppercase mb-4 leading-none style-red-on-white w-full">
+                    GET 1
+                </div>
+                <p class="text-3xl md:text-4xl font-black text-white bg-vibe px-6 py-2 uppercase tracking-wide border-4 border-white mt-4">
+                    ON ALMOST EVERYTHING
+                </p>
+            </div>
+
+            <!-- Deal 2: Kitchen Runner -->
+            <div class="bg-white border-8 border-vibe p-8 flex flex-col justify-between items-center text-center transform hover:scale-105 transition-transform duration-300 shadow-[12px_12px_0px_#FFD700] relative">
+                <div class="bg-yellow text-vibe font-anton text-4xl px-8 py-3 mb-6 uppercase border-4 border-vibe w-full">
+                    Kitchen Deal
+                </div>
+                <h3 class="font-anton text-5xl md:text-7xl text-vibe uppercase mb-4 leading-none squeezed-text">
+                    KITCHEN RUNNER
+                </h3>
+                <div class="w-full bg-vibe h-2 mb-6"></div>
+                <p class="text-2xl md:text-3xl font-black text-vibe mb-8 uppercase tracking-wide px-4 leading-snug">
+                    2 Big Runners<br><span class="text-4xl font-anton">+</span><br>2 Small Mats
+                </p>
+                <div class="font-anton text-7xl md:text-9xl text-white bg-vibe px-8 py-2 border-8 border-vibe w-full style-white-on-red">
+                    ₹600
+                </div>
+            </div>
+        </div>
+
+        <!-- VIP UNLOCK SECTION (Firebase) -->
+        <div id="vip" class="w-full max-w-5xl mt-20 relative">
+            <div class="relative bg-vibe border-8 border-vibe p-8 md:p-12 shadow-[12px_12px_0px_#FFD700] text-center">
+                
+                <h2 class="font-anton text-5xl md:text-7xl text-white uppercase mb-8 style-white-on-red bg-yellow border-8 border-vibe inline-block px-8 py-2">
+                    VIP EXCLUSIVE OFFER
+                </h2>
+                
+                <!-- Locked State -->
+                <div id="locked-view" class="flex flex-col items-center">
+                    <div class="bg-white rounded-full p-8 mb-6 border-8 border-vibe animate-pulse">
+                        <i class="fas fa-lock text-7xl text-vibe"></i>
+                    </div>
+                    <p class="text-3xl md:text-4xl text-white font-black mb-10 uppercase tracking-wider max-w-2xl leading-snug">
+                        Unlock the Secret Towel Mega-Deal by making an account!
+                    </p>
+                    <button id="unlock-vip-btn" class="font-anton text-4xl md:text-6xl bg-white text-vibe py-6 px-12 border-8 border-vibe hover:bg-vibe hover:text-white hover:border-white transition-all duration-300 uppercase w-full md:w-auto">
+                        UNLOCK NOW
+                    </button>
+                </div>
+
+                <!-- Unlocked State (Hidden by default) -->
+                <div id="unlocked-view" class="hidden flex-col items-center">
+                    <div class="bg-white rounded-full p-8 mb-6 border-8 border-vibe">
+                        <i class="fas fa-unlock text-7xl text-vibe"></i>
+                    </div>
+                    <div class="bg-white text-vibe font-anton text-4xl px-8 py-2 mb-8 uppercase border-4 border-vibe">
+                        DEAL UNLOCKED!
+                    </div>
+                    <h3 class="font-anton text-7xl md:text-[8rem] text-white uppercase mb-4 leading-none style-white-on-red">
+                        PREMIUM TOWELS
+                    </h3>
+                    <p class="text-3xl md:text-4xl font-black text-white mb-6 uppercase tracking-widest border-b-8 border-white pb-4 inline-block">
+                        Get 4 Towels For Just
+                    </p>
+                    <div class="font-anton text-8xl md:text-[10rem] text-vibe bg-white px-12 py-4 border-8 border-vibe mb-6 leading-none style-red-on-white w-full">
+                        ₹500
+                    </div>
+                    <p class="text-vibe font-bold text-2xl uppercase mt-4 bg-yellow border-4 border-vibe px-6 py-2 inline-block">Show this on your phone at checkout!</p>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- LONG TERM CUSTOMER CONVERSION -->
+    <div id="contact" class="bg-yellow border-t-8 border-white py-16 px-4 flex flex-col items-center text-center w-full relative z-30">
+        <h2 class="font-anton text-5xl md:text-7xl text-white uppercase mb-4 style-white-on-red">
+            NEVER MISS A DEAL
+        </h2>
+        <p class="text-vibe font-black text-2xl md:text-3xl uppercase mb-10 max-w-2xl">
+            Join our community online to get daily updates, new arrivals, and flash sales!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-6 w-full max-w-3xl justify-center mb-16">
+            <a href="https://www.instagram.com/jagdish_silk_store" target="_blank" class="bg-vibe text-white font-anton text-3xl md:text-4xl px-8 py-6 border-4 border-vibe hover:bg-white hover:text-vibe transition-colors shadow-[6px_6px_0px_#e60000] flex items-center justify-center">
+                <i class="fab fa-instagram mr-3"></i> FOLLOW IG
+            </a>
+            <a href="https://wa.me/919815068679?text=Hi%20Jagdish%20Silk%20Store" target="_blank" class="bg-white text-vibe font-anton text-3xl md:text-4xl px-8 py-6 border-4 border-vibe hover:bg-vibe hover:text-white transition-colors shadow-[6px_6px_0px_#e60000] flex items-center justify-center">
+                <i class="fab fa-whatsapp mr-3"></i> WHATSAPP
+            </a>
+        </div>
+        
+        <!-- Contact Us Section Moved Here -->
+        <div class="bg-vibe w-full mt-12 flex flex-col items-center z-20">
+            <div class="w-full bg-white h-4 md:h-6 mb-8"></div>
+            <h2 class="font-anton text-6xl md:text-[8rem] uppercase leading-none style-white-on-red squeezed-text drop-shadow-[0_8px_0px_rgba(0,0,0,0.1)] mb-4">
+                AAAJAOO
+            </h2>
+            <div class="font-anton text-[3.5rem] sm:text-7xl md:text-[7rem] lg:text-[9rem] text-white style-white-on-red squeezed-text whitespace-nowrap mb-6">
+                +91 9815068679
+            </div>
+            <div class="w-full bg-white h-4 md:h-6 mt-4"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER / LOCATION -->
+    <footer id="visit" class="bg-vibe text-white py-12 px-4 border-t-8 border-white flex flex-col items-center text-center">
+        <h2 class="font-anton text-6xl md:text-8xl uppercase mb-8 style-white-on-red">
+            VISIT US
+        </h2>
+        <div class="bg-white text-vibe p-8 border-8 border-vibe max-w-3xl w-full mb-10 text-center sticker-shadow-red">
+            <p class="font-anton text-4xl md:text-6xl uppercase mb-4 style-white-on-red">Jagdish Silk Store</p>
+            <p class="text-3xl md:text-4xl font-black uppercase mb-4 tracking-wider"><i class="fas fa-map-marker-alt text-vibe mr-3"></i> Sarafan Bazar, Phagwara</p>
+        </div>
+        <a href="https://maps.google.com/?q=Jagdish+Silk+Store+Sarafan+Bazar+Phagwara" target="_blank" class="font-anton text-3xl md:text-5xl bg-white text-vibe py-6 px-12 border-8 border-vibe hover:bg-black hover:text-white transition-colors uppercase w-full max-w-md shadow-[8px_8px_0px_#ffffff]">
+            GET DIRECTIONS
+        </a>
+        <div class="mt-12 flex flex-wrap justify-center gap-3 max-w-3xl">
+            <div class="w-full flex justify-center mb-2"><p class="font-anton text-4xl md:text-5xl uppercase text-white style-white-on-red bg-yellow px-6 py-2 border-4 border-white">Quick Links</p></div>
+            <a href="#home" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Home</a>
+            <a href="#products" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">What We Have</a>
+            <a href="#deals" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Deals</a>
+            <a href="#vip" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">VIP Offer</a>
+            <a href="#contact" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Contact</a>
+            <a href="#visit" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors">Visit Us</a>
+            <a href="#qr" class="font-anton text-xl bg-white text-vibe px-4 py-2 border-4 border-vibe uppercase hover:bg-yellow transition-colors"><i class="fas fa-qrcode mr-2"></i>Scan &amp; Share</a>
+        </div>
+    </footer>
+
+    <!-- LOGIN / REGISTER MODAL -->
+    <div id="login-modal" class="fixed inset-0 bg-black/80 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-vibe border-8 border-white p-8 max-w-xl w-full max-h-[92vh] overflow-y-auto shadow-[16px_16px_0px_#FFD700] relative">
+            <button id="close-modal-btn" class="absolute top-2 right-4 text-white text-5xl font-bold hover:text-yellow transition-colors cursor-pointer">&times;</button>
+            <h2 class="font-anton text-5xl md:text-6xl text-white uppercase mb-4 text-center style-white-on-red">
+                JOIN THE CLUB
+            </h2>
+            <p id="login-sub" class="font-black text-white text-center mb-8 uppercase tracking-widest text-lg border-b-4 border-white pb-4">Unlock Exclusive Store Deals</p>
+            
+            <form id="login-form" class="flex flex-col gap-6" novalidate>
+                <!-- STEP 1: phone only -->
+                <div id="step-phone" class="flex flex-col gap-6">
+                    <div>
+                        <label class="font-anton text-2xl text-white uppercase mb-2 block">Phone Number</label>
+                        <input type="tel" id="user-phone" inputmode="numeric" pattern="[0-9]*" maxlength="10" autocomplete="tel-national" class="w-full bg-white text-vibe font-black text-xl p-4 border-4 border-white outline-none focus:border-yellow" placeholder="10-digit mobile number">
+                        <p id="phone-error" class="hidden bg-yellow text-vibe font-black px-3 py-2 uppercase text-sm mt-2"></p>
+                    </div>
+                    <button type="button" id="continue-btn" class="font-anton text-4xl bg-yellow text-vibe py-4 border-4 border-white hover:bg-white hover:border-yellow transition-colors uppercase w-full shadow-[8px_8px_0px_#ffffff] cursor-pointer">CONTINUE</button>
+                </div>
+
+                <!-- STEP 2: only for new numbers -->
+                <div id="step-details" class="hidden flex-col gap-6">
+                    <button type="button" id="change-number-btn" class="text-white font-black uppercase text-left cursor-pointer hover:text-yellow">&larr; <span id="shown-phone"></span> &middot; Change number</button>
+                    <div>
+                        <label class="font-anton text-2xl text-white uppercase mb-2 block">Your Name</label>
+                        <input type="text" id="user-name" class="w-full bg-white text-vibe font-black text-xl p-4 border-4 border-white outline-none focus:border-yellow" placeholder="E.g. Rahul Kumar">
+                    </div>
+                    <div>
+                        <label class="font-anton text-2xl text-white uppercase mb-2 block">Date of Birth</label>
+                        <input type="hidden" id="user-dob">
+                        <div class="grid grid-cols-3 gap-2">
+                            <select id="dob-d" class="w-full bg-white text-vibe font-black text-lg p-3 border-4 border-white outline-none focus:border-yellow"></select>
+                            <select id="dob-m" class="w-full bg-white text-vibe font-black text-lg p-3 border-4 border-white outline-none focus:border-yellow"></select>
+                            <select id="dob-y" class="w-full bg-white text-vibe font-black text-lg p-3 border-4 border-white outline-none focus:border-yellow"></select>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <label class="font-anton text-2xl text-white uppercase mb-2 block">Your City</label>
+                        <input type="text" id="user-city" autocomplete="off" class="w-full bg-white text-vibe font-black text-xl p-4 border-4 border-white outline-none focus:border-yellow" placeholder="Search City...">
+                        <div id="city-dropdown" class="absolute top-full left-0 w-full max-h-48 overflow-y-auto bg-white border-4 border-vibe hidden z-50 mt-1 shadow-[8px_8px_0px_rgba(0,0,0,0.5)]">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                    <p id="detail-error" class="hidden bg-yellow text-vibe font-black px-3 py-2 uppercase text-sm"></p>
+                    <button type="submit" id="submit-login-btn" class="font-anton text-4xl bg-yellow text-vibe py-4 border-4 border-white hover:bg-white hover:border-yellow transition-colors uppercase w-full shadow-[8px_8px_0px_#ffffff] cursor-pointer">
+                        GET ACCESS
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD MODAL -->
+    <div id="dashboard-modal" class="fixed inset-0 bg-black/80 z-[110] hidden p-4 overflow-y-auto backdrop-blur-sm">
+        <div class="bg-vibe border-8 border-white p-6 md:p-8 max-w-xl w-full shadow-[16px_16px_0px_#FFD700] relative m-auto">
+            <button id="close-dashboard-btn" class="absolute top-2 right-4 text-white text-5xl font-bold hover:text-yellow transition-colors cursor-pointer">&times;</button>
+            <h2 class="font-anton text-5xl md:text-6xl text-white uppercase mb-2 text-center style-white-on-red">MY DASHBOARD</h2>
+            <p id="dash-greeting" class="font-black text-white text-center mb-8 uppercase tracking-widest text-lg border-b-4 border-white pb-4">Welcome</p>
+
+            <div class="card-scene">
+                <div class="loyalty-card" id="loyalty-card">
+                    <!-- FRONT -->
+                    <div class="card-face card-front">
+                        <div class="cf-row">
+                            <div><div class="cf-brand">JAGDISH</div><div class="cf-sub">SILK STORE &middot; PHAGWARA</div></div>
+                            <div class="cf-vip">VIP</div>
+                        </div>
+                        <div class="cf-row" style="align-items:center;justify-content:flex-start;gap:4cqw">
+                            <div class="cf-chip"></div>
+                            <div class="cf-phone" id="card-phone">&bull;&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull;&bull;</div>
+                        </div>
+                        <div class="cf-name" id="card-name">NAME</div>
+                        <div class="cf-info">
+                            <div><small>BIRTHDAY</small><b id="card-dob">-</b></div>
+                            <div><small>CITY</small><b id="card-city">-</b></div>
+                            <div><small>LAST LOGIN</small><b id="card-login">-</b></div>
+                        </div>
+                    </div>
+                    <!-- BACK -->
+                    <div class="card-face card-back">
+                        <div class="cb-stripe"></div>
+                        <div class="cb-body">
+                            <div class="cb-label">LOYALTY POINTS</div>
+                            <div class="cb-points" id="card-points">-</div>
+                            <div class="cb-note">SHOW THIS CARD AT CHECKOUT</div>
+                        </div>
+                        <div class="cb-foot"><span>MEMBER SINCE <b id="card-joined">-</b></span><span class="cb-aaj">AAAJAOO</span></div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center font-black text-white uppercase tracking-widest text-sm mt-4"><i class="fas fa-sync-alt mr-2"></i>Tap card to flip</p>
+            <button id="push-btn" class="hidden w-full mt-6 font-anton text-2xl bg-yellow text-vibe py-3 border-4 border-white hover:bg-white transition-colors uppercase cursor-pointer"><i class="fas fa-bell mr-2"></i>Turn on offer &amp; birthday alerts</button>
+
+            <!-- Staff only -->
+            <button id="staff-toggle-btn" class="mt-8 w-full text-white/70 hover:text-white font-bold uppercase text-sm tracking-widest cursor-pointer"><i class="fas fa-lock mr-2"></i>Staff only</button>
+            <form id="staff-form" class="hidden flex-col gap-4 mt-4 border-t-4 border-white pt-4">
+                <input type="password" id="staff-password" required autocomplete="off" class="w-full bg-white text-vibe font-black text-xl p-3 border-4 border-white outline-none focus:border-yellow" placeholder="Staff password">
+                <input type="number" id="staff-bill" min="0" step="any" class="w-full bg-white text-vibe font-black text-xl p-3 border-4 border-white outline-none focus:border-yellow" placeholder="Bill amount in ₹ (e.g. 2500)">
+                <input type="number" id="staff-points" step="1" class="w-full bg-white text-vibe font-black text-xl p-3 border-4 border-white outline-none focus:border-yellow" placeholder="Or points manually (e.g. -50 to redeem)">
+                <button type="submit" id="staff-submit-btn" class="font-anton text-3xl bg-yellow text-vibe py-3 border-4 border-white hover:bg-white transition-colors uppercase w-full cursor-pointer">ADD POINTS</button>
+                <p id="staff-msg" class="text-white font-black text-center uppercase"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- COUNTER QR PAGE (#qr) -->
+    <div id="qr-page" class="fixed inset-0 z-[130] bg-white hidden overflow-y-auto flex-col items-center text-center p-6">
+        <h2 class="font-anton text-7xl md:text-9xl text-vibe uppercase leading-none mt-4">AAAJAOO</h2>
+        <p class="font-anton text-4xl md:text-6xl text-vibe uppercase mt-2">Scan &amp; Join</p>
+        <div id="qr-code" class="border-8 border-vibe p-4 mt-6 bg-white inline-block"></div>
+        <p class="font-black text-vibe text-xl md:text-3xl uppercase mt-6 max-w-xl">Get your VIP loyalty card &amp; exclusive deals</p>
+        <p id="qr-url" class="font-bold text-vibe text-sm mt-2 break-all"></p>
+        <p class="font-anton text-vibe text-3xl mt-2">JAGDISH SILK STORE &middot; +91 9815068679</p>
+        <div class="no-print flex gap-3 mt-6 mb-6">
+            <button id="qr-print" class="bg-vibe text-white font-anton text-2xl px-6 py-3 uppercase cursor-pointer"><i class="fas fa-print mr-2"></i>Print</button>
+            <button id="qr-close" class="bg-white text-vibe font-anton text-2xl px-6 py-3 border-4 border-vibe uppercase cursor-pointer">Close</button>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <button id="admin-fab" title="Admin" class="fixed bottom-3 right-3 z-[90] w-9 h-9 rounded-full bg-white text-vibe border-2 border-vibe opacity-50 hover:opacity-100 transition-opacity cursor-pointer text-sm"><i class="fas fa-user-shield"></i></button>
+    <div id="admin-modal" class="fixed inset-0 bg-black/80 z-[120] hidden p-4 overflow-y-auto backdrop-blur-sm">
+        <div class="bg-vibe border-8 border-white p-5 md:p-8 max-w-4xl w-full shadow-[16px_16px_0px_#FFD700] relative m-auto">
+            <button id="admin-close" class="absolute top-2 right-4 text-white text-5xl font-bold hover:text-yellow transition-colors cursor-pointer">&times;</button>
+            <h2 class="font-anton text-5xl text-white uppercase text-center style-white-on-red">ADMIN</h2>
+
+            <form id="admin-login" class="flex flex-col gap-4 max-w-md mx-auto mt-6">
+                <input type="password" id="admin-pass" required autocomplete="off" class="w-full bg-white text-vibe font-black text-xl p-3 border-4 border-white outline-none focus:border-yellow" placeholder="Admin password">
+                <button type="submit" class="font-anton text-3xl bg-yellow text-vibe py-3 border-4 border-white hover:bg-white transition-colors uppercase w-full cursor-pointer">LOGIN</button>
+                <p id="admin-msg" class="text-white font-black text-center uppercase"></p>
+            </form>
+
+            <div id="admin-panel" class="hidden mt-4">
+                <div class="bg-white text-vibe p-4 mb-4 border-4 border-yellow">
+                    <p class="font-black text-xs uppercase">Today</p>
+                    <p id="af-today" class="font-anton text-3xl uppercase leading-tight">-</p>
+                    <p id="af-next" class="font-bold text-sm mb-3"></p>
+                    <div class="flex flex-col md:flex-row gap-2">
+                        <input id="af-text" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow" placeholder="Optional line under the banner (e.g. Double points this week!)">
+                        <button id="af-toggle" class="font-anton text-lg px-4 py-2 border-4 border-vibe uppercase whitespace-nowrap cursor-pointer">Website banner: OFF</button>
+                    </div>
+                    <p id="af-msg" class="font-black text-xs uppercase mt-2"></p>
+                </div>
+                <div id="admin-summary" class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4"></div>
+                <div class="flex gap-2 mb-3">
+                    <input id="admin-search" class="flex-1 min-w-0 bg-white text-vibe font-bold text-lg p-2 border-4 border-white outline-none focus:border-yellow" placeholder="Search name, number or city">
+                    <a id="admin-sheet" href="#" target="_blank" class="bg-yellow text-vibe font-anton text-lg px-3 py-2 border-4 border-white uppercase flex items-center whitespace-nowrap"><i class="fas fa-table mr-2"></i>Sheet</a>
+                    <a href="#qr" title="Counter QR" class="bg-white text-vibe font-anton text-lg px-3 py-2 border-4 border-white flex items-center"><i class="fas fa-qrcode"></i></a>
+                    <button id="admin-refresh" class="bg-white text-vibe font-anton text-lg px-3 py-2 border-4 border-white cursor-pointer"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <form id="admin-edit" class="hidden flex-col gap-3 bg-white text-vibe p-4 mb-3 border-4 border-yellow">
+                    <p class="font-anton text-2xl uppercase">Editing <span id="ae-phone"></span></p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div><label class="font-black text-xs uppercase">Name</label><input id="ae-name" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow"></div>
+                        <div><label class="font-black text-xs uppercase">City</label><input id="ae-city" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow"></div>
+                        <div><label class="font-black text-xs uppercase">Date of birth</label><input type="date" id="ae-dob" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow"></div>
+                        <div><label class="font-black text-xs uppercase">Loyalty points</label><input type="number" min="0" step="1" id="ae-points" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow"></div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="number" min="0" step="any" id="ae-bill" class="w-full border-4 border-vibe p-2 font-bold text-lg outline-none focus:border-yellow" placeholder="Bill amount in ₹">
+                        <button type="button" id="ae-bill-btn" class="bg-yellow text-vibe font-anton text-lg px-3 border-4 border-vibe uppercase whitespace-nowrap cursor-pointer">Add points</button>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="submit" class="flex-1 bg-vibe text-white font-anton text-xl py-2 uppercase cursor-pointer">Save changes</button>
+                        <button type="button" id="ae-cancel" class="bg-white text-vibe font-anton text-xl px-4 py-2 border-4 border-vibe uppercase cursor-pointer">Close</button>
+                    </div>
+                    <p id="ae-msg" class="font-black uppercase"></p>
+                </form>
+                <div id="admin-list" class="bg-white text-vibe max-h-[50vh] overflow-y-auto border-4 border-white"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIREBASE AUTH LOGIC -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // --- PARALLAX EFFECT FOR AAAJAOO ---
+        const heroAaajaoo = document.getElementById('hero-aaajaoo');
+        document.addEventListener('mousemove', (e) => {
+            if(!heroAaajaoo) return;
+            const x = (window.innerWidth / 2 - e.pageX) / 40;
+            const y = (window.innerHeight / 2 - e.pageY) / 40;
+            heroAaajaoo.style.transform = `translate(${x}px, ${y}px) rotate(-1deg)`;
+        });
+
+        // --- SEARCHABLE CITY DROPDOWN ---
+        const cities = "Phagwara, Punjab|Jalandhar, Punjab|Ludhiana, Punjab|Kapurthala, Punjab|Goraya, Punjab|Nakodar, Punjab|Banga, Punjab|Hoshiarpur, Punjab|Amritsar, Punjab|Chandigarh, Chandigarh|Mumbai, Maharashtra|Delhi, Delhi|Bengaluru, Karnataka|Ahmedabad, Gujarat|Hyderabad, Telangana|Chennai, Tamil Nadu|Kolkata, West Bengal|Pune, Maharashtra|Jaipur, Rajasthan|Surat, Gujarat|Lucknow, Uttar Pradesh|Kanpur, Uttar Pradesh|Nagpur, Maharashtra|Patna, Bihar|Indore, Madhya Pradesh|Thane, Maharashtra|Bhopal, Madhya Pradesh|Visakhapatnam, Andhra Pradesh|Vadodara, Gujarat|Firozabad, Uttar Pradesh|Rajkot, Gujarat|Agra, Uttar Pradesh|Siliguri, West Bengal|Nashik, Maharashtra|Faridabad, Haryana|Patiala, Punjab|Meerut, Uttar Pradesh|Kalyan-Dombivali, Maharashtra|Vasai-Virar, Maharashtra|Varanasi, Uttar Pradesh|Srinagar, Jammu and Kashmir|Dhanbad, Jharkhand|Jodhpur, Rajasthan|Raipur, Chhattisgarh|Allahabad, Uttar Pradesh|Coimbatore, Tamil Nadu|Jabalpur, Madhya Pradesh|Gwalior, Madhya Pradesh|Vijayawada, Andhra Pradesh|Madurai, Tamil Nadu|Guwahati, Assam|Hubli-Dharwad, Karnataka|Amroha, Uttar Pradesh|Moradabad, Uttar Pradesh|Gurgaon, Haryana|Aligarh, Uttar Pradesh|Solapur, Maharashtra|Ranchi, Jharkhand|Tiruchirappalli, Tamil Nadu|Bhubaneswar, Odisha|Salem, Tamil Nadu|Warangal, Telangana|Mira-Bhayandar, Maharashtra|Thiruvananthapuram, Kerala|Bhiwandi, Maharashtra|Saharanpur, Uttar Pradesh|Guntur, Andhra Pradesh|Amravati, Maharashtra|Bikaner, Rajasthan|Noida, Uttar Pradesh|Jamshedpur, Jharkhand|Bhilai Nagar, Chhattisgarh|Cuttack, Odisha|Kochi, Kerala|Udaipur, Rajasthan|Bhavnagar, Gujarat|Dehradun, Uttarakhand|Asansol, West Bengal|Nanded-Waghala, Maharashtra|Ajmer, Rajasthan|Jamnagar, Gujarat|Ujjain, Madhya Pradesh|Sangli, Maharashtra|Loni, Uttar Pradesh|Jhansi, Uttar Pradesh|Pondicherry, Puducherry|Nellore, Andhra Pradesh|Jammu, Jammu and Kashmir|Belagavi, Karnataka|Raurkela, Odisha|Mangaluru, Karnataka|Tirunelveli, Tamil Nadu|Malegaon, Maharashtra|Gaya, Bihar|Tiruppur, Tamil Nadu|Davanagere, Karnataka|Kozhikode, Kerala|Akola, Maharashtra|Kurnool, Andhra Pradesh|Bokaro Steel City, Jharkhand|Rajahmundry, Andhra Pradesh|Ballari, Karnataka|Agartala, Tripura|Bhagalpur, Bihar|Latur, Maharashtra|Dhule, Maharashtra|Korba, Chhattisgarh|Bhilwara, Rajasthan|Brahmapur, Odisha|Mysore, Karnataka|Muzaffarpur, Bihar|Ahmednagar, Maharashtra|Kollam, Kerala|Raghunathganj, West Bengal|Bilaspur, Chhattisgarh|Shahjahanpur, Uttar Pradesh|Thrissur, Kerala|Alwar, Rajasthan|Kakinada, Andhra Pradesh|Nizamabad, Telangana|Sagar, Madhya Pradesh|Tumkur, Karnataka|Hisar, Haryana|Rohtak, Haryana|Panipat, Haryana|Darbhanga, Bihar|Kharagpur, West Bengal|Aizawl, Mizoram|Ichalkaranji, Maharashtra|Tirupati, Andhra Pradesh|Karnal, Haryana|Bathinda, Punjab|Rampur, Uttar Pradesh|Shivamogga, Karnataka|Ratlam, Madhya Pradesh|Modinagar, Uttar Pradesh|Durg, Chhattisgarh|Shillong, Meghalaya|Imphal, Manipur|Hapur, Uttar Pradesh|Ranipet, Tamil Nadu|Anantapur, Andhra Pradesh|Arrah, Bihar|Karimnagar, Telangana|Parbhani, Maharashtra|Etawah, Uttar Pradesh|Bharatpur, Rajasthan|Begusarai, Bihar|New Delhi, Delhi|Chhapra, Bihar|Kadapa, Andhra Pradesh|Ramagundam, Telangana|Pali, Rajasthan|Satna, Madhya Pradesh|Vizianagaram, Andhra Pradesh|Katihar, Bihar|Hardwar, Uttarakhand|Sonipat, Haryana|Nagercoil, Tamil Nadu|Thanjavur, Tamil Nadu|Murwara (Katni), Madhya Pradesh|Naihati, West Bengal|Sambhal, Uttar Pradesh|Nadiad, Gujarat|Yamunanagar, Haryana|English Bazar, West Bengal|Eluru, Andhra Pradesh|Munger, Bihar|Panchkula, Haryana|Raayachuru, Karnataka|Panvel, Maharashtra|Deoghar, Jharkhand|Ongole, Andhra Pradesh|Nandyal, Andhra Pradesh|Morena, Madhya Pradesh|Bhiwani, Haryana|Porbandar, Gujarat|Palakkad, Kerala|Anand, Gujarat|Purnia, Bihar|Baharampur, West Bengal|Barmer, Rajasthan|Morvi, Gujarat|Orai, Uttar Pradesh|Bahraich, Uttar Pradesh|Sikar, Rajasthan|Vellore, Tamil Nadu|Singrauli, Madhya Pradesh|Khammam, Telangana|Mahesana, Gujarat|Silchar, Assam|Sambalpur, Odisha|Rewa, Madhya Pradesh|Unnao, Uttar Pradesh|Hugli-Chinsurah, West Bengal|Raiganj, West Bengal|Phusro, Jharkhand|Adityapur, Jharkhand|Alappuzha, Kerala|Bahadurgarh, Haryana|Machilipatnam, Andhra Pradesh|Rae Bareli, Uttar Pradesh|Jalpaiguri, West Bengal|Bharuch, Gujarat|Pathankot, Punjab|Baramula, Jammu and Kashmir|Adoni, Andhra Pradesh|Jind, Haryana|Tonk, Rajasthan|Tenali, Andhra Pradesh|Kancheepuram, Tamil Nadu|Vapi, Gujarat|Sirsa, Haryana|Navsari, Gujarat|Mahbubnagar, Telangana|Puri, Odisha|Robertson Pet, Karnataka|Erode, Tamil Nadu|Batala, Punjab|Haldwani-cum-Kathgodam, Uttarakhand|Vidisha, Madhya Pradesh|Saharsa, Bihar|Thanesar, Haryana|Chittoor, Andhra Pradesh|Veraval, Gujarat|Lakhimpur, Uttar Pradesh|Sitapur, Uttar Pradesh|Hindupur, Andhra Pradesh|Santipur, West Bengal|Balurghat, West Bengal|Ganjbasoda, Madhya Pradesh|Moga, Punjab|Proddatur, Andhra Pradesh|Srinagar, Uttarakhand|Medinipur, West Bengal|Habra, West Bengal|Sasaram, Bihar|Hajipur, Bihar|Bhuj, Gujarat|Shivpuri, Madhya Pradesh|Ranaghat, West Bengal|Shimla, Himachal Pradesh|Tiruvannamalai, Tamil Nadu|Kaithal, Haryana|Rajnandgaon, Chhattisgarh|Godhra, Gujarat|Hazaribag, Jharkhand|Bhimavaram, Andhra Pradesh|Mandsaur, Madhya Pradesh|Dibrugarh, Assam|Kolar, Karnataka|Bankura, West Bengal|Mandya, Karnataka|Dehri-on-Sone, Bihar|Madanapalle, Andhra Pradesh|Malerkotla, Punjab|Lalitpur, Uttar Pradesh|Bettiah, Bihar|Pollachi, Tamil Nadu|Khanna, Punjab|Neemuch, Madhya Pradesh|Palwal, Haryana|Palanpur, Gujarat|Guntakal, Andhra Pradesh|Nabadwip, West Bengal|Udupi, Karnataka|Jagdalpur, Chhattisgarh|Motihari, Bihar|Pilibhit, Uttar Pradesh|Dimapur, Nagaland|Mohali, Punjab|Sadulpur, Rajasthan|Rajapalayam, Tamil Nadu|Dharmavaram, Andhra Pradesh|Kashipur, Uttarakhand|Sivakasi, Tamil Nadu|Darjiling, West Bengal|Chikkamagaluru, Karnataka|Gudivada, Andhra Pradesh|Baleshwar Town, Odisha|Mancherial, Telangana|Srikakulam, Andhra Pradesh|Adilabad, Telangana|Yavatmal, Maharashtra|Barnala, Punjab|Nagaon, Assam|Narasaraopet, Andhra Pradesh|Raigarh, Chhattisgarh|Roorkee, Uttarakhand|Valsad, Gujarat|Ambikapur, Chhattisgarh|Giridih, Jharkhand|Chandausi, Uttar Pradesh|Purulia, West Bengal|Patan, Gujarat|Bagaha, Bihar|Hardoi, Uttar Pradesh|Achalpur, Maharashtra|Osmanabad, Maharashtra|Deesa, Gujarat|Nandurbar, Maharashtra|Azamgarh, Uttar Pradesh|Ramgarh, Jharkhand|Firozpur, Punjab|Baripada Town, Odisha|Karwar, Karnataka|Siwan, Bihar|Rajampet, Andhra Pradesh|Pudukkottai, Tamil Nadu|Anantnag, Jammu and Kashmir|Tadpatri, Andhra Pradesh|Satara, Maharashtra|Bhadrak, Odisha|Kishanganj, Bihar|Suryapet, Telangana|Wardha, Maharashtra|Ranebennuru, Karnataka|Amreli, Gujarat|Neyveli (TS), Tamil Nadu|Jamalpur, Bihar|Marmagao, Goa|Udgir, Maharashtra|Tadepalligudem, Andhra Pradesh|Nagapattinam, Tamil Nadu|Buxar, Bihar|Aurangabad, Maharashtra|Jehanabad, Bihar|Khair, Uttar Pradesh|Sawai Madhopur, Rajasthan|Chilakaluripet, Andhra Pradesh|Aurangabad, Bihar|Malappuram, Kerala|Rewari, Haryana|Nagaur, Rajasthan|Sultanpur, Uttar Pradesh|Nagda, Madhya Pradesh|Port Blair, Andaman and Nicobar Islands|Lakhisarai, Bihar|Panaji, Goa|Tinsukia, Assam|Itarsi, Madhya Pradesh|Kohima, Nagaland|Balangir, Odisha|Nawada, Bihar|Jharsuguda, Odisha|Jagtial, Telangana|Viluppuram, Tamil Nadu|Amalner, Maharashtra|Zirakpur, Punjab|Tanda, Uttar Pradesh|Tiruchengode, Tamil Nadu|Nagina, Uttar Pradesh|Yemmiganur, Andhra Pradesh|Vaniyambadi, Tamil Nadu|Sarni, Madhya Pradesh|Theni Allinagaram, Tamil Nadu|Margao, Goa|Akot, Maharashtra|Sehore, Madhya Pradesh|Mhow Cantonment, Madhya Pradesh|Kot Kapura, Punjab|Makrana, Rajasthan|Pandharpur, Maharashtra|Miryalaguda, Telangana|Shamli, Uttar Pradesh|Seoni, Madhya Pradesh|Ranibennur, Karnataka|Kadiri, Andhra Pradesh|Shrirampur, Maharashtra|Rudrapur, Uttarakhand|Parli, Maharashtra|Najibabad, Uttar Pradesh|Nirmal, Telangana|Udhagamandalam, Tamil Nadu|Shikohabad, Uttar Pradesh|Jhumri Tilaiya, Jharkhand|Aruppukkottai, Tamil Nadu|Ponnani, Kerala|Jamui, Bihar|Sitamarhi, Bihar|Chirala, Andhra Pradesh|Anjar, Gujarat|Karaikal, Puducherry|Hansi, Haryana|Anakapalle, Andhra Pradesh|Mahasamund, Chhattisgarh|Faridkot, Punjab|Saunda, Jharkhand|Dhoraji, Gujarat|Paramakudi, Tamil Nadu|Balaghat, Madhya Pradesh|Sujangarh, Rajasthan|Khambhat, Gujarat|Muktsar, Punjab|Rajpura, Punjab|Kavali, Andhra Pradesh|Dhamtari, Chhattisgarh|Ashok Nagar, Madhya Pradesh|Sardarshahar, Rajasthan|Mahuva, Gujarat|Bargarh, Odisha|Kamareddy, Telangana|Sahibganj, Jharkhand|Kothagudem, Telangana|Ramanagaram, Karnataka|Gokak, Karnataka|Tikamgarh, Madhya Pradesh|Araria, Bihar|Rishikesh, Uttarakhand|Shahdol, Madhya Pradesh|Medininagar (Daltonganj), Jharkhand|Arakkonam, Tamil Nadu|Washim, Maharashtra|Sangrur, Punjab|Bodhan, Telangana|Fazilka, Punjab|Palacole, Andhra Pradesh|Keshod, Gujarat|Sullurpeta, Andhra Pradesh|Wadhwan, Gujarat|Gurdaspur, Punjab|Vatakara, Kerala|Tura, Meghalaya|Narnaul, Haryana|Kharar, Punjab|Yadgir, Karnataka|Ambejogai, Maharashtra|Ankleshwar, Gujarat|Savarkundla, Gujarat|Paradip, Odisha|Virudhachalam, Tamil Nadu|Kanhangad, Kerala|Kadi, Gujarat|Srivilliputhur, Tamil Nadu|Gobindgarh, Punjab|Tindivanam, Tamil Nadu|Mansa, Punjab|Taliparamba, Kerala|Manmad, Maharashtra|Tanuku, Andhra Pradesh|Rayachoti, Andhra Pradesh|Virudhunagar, Tamil Nadu|Koyilandy, Kerala|Jorhat, Assam|Karur, Tamil Nadu|Valparai, Tamil Nadu|Srikalahasti, Andhra Pradesh|Neyyattinkara, Kerala|Bapatla, Andhra Pradesh|Fatehabad, Haryana|Malout, Punjab|Sankarankovil, Tamil Nadu|Tenkasi, Tamil Nadu|Ratnagiri, Maharashtra|Rabkavi Banhatti, Karnataka|Sikandrabad, Uttar Pradesh|Chaibasa, Jharkhand|Chirmiri, Chhattisgarh|Palwancha, Telangana|Bhawanipatna, Odisha|Kayamkulam, Kerala|Pithampur, Madhya Pradesh|Nabha, Punjab|Shahabad, Hardoi, Uttar Pradesh|Dhenkanal, Odisha|Uran Islampur, Maharashtra|Gopalganj, Bihar|Bongaigaon City, Assam|Palani, Tamil Nadu|Pusad, Maharashtra|Sopore, Jammu and Kashmir|Pilkhuwa, Uttar Pradesh|Tarn Taran, Punjab|Renukoot, Uttar Pradesh|Mandamarri, Telangana|Shahabad, Karnataka|Barbil, Odisha|Koratla, Telangana|Madhubani, Bihar|Arambagh, West Bengal|Gohana, Haryana|Ladnu, Rajasthan|Pattukkottai, Tamil Nadu|Sirsi, Karnataka|Sircilla, Telangana|Tamluk, West Bengal|Jagraon, Punjab|AlipurdUrban Agglomerationr, West Bengal|Alirajpur, Madhya Pradesh|Tandur, Telangana|Naidupet, Andhra Pradesh|Tirupathur, Tamil Nadu|Tohana, Haryana|Ratangarh, Rajasthan|Dhubri, Assam|Masaurhi, Bihar|Visnagar, Gujarat|Vrindavan, Uttar Pradesh|Nokha, Rajasthan|Nagari, Andhra Pradesh|Narwana, Haryana|Ramanathapuram, Tamil Nadu|Ujhani, Uttar Pradesh|Samastipur, Bihar|Laharpur, Uttar Pradesh|Sangamner, Maharashtra|Nimbahera, Rajasthan|Siddipet, Telangana|Suri, West Bengal|Diphu, Assam|Jhargram, West Bengal|Shirpur-Warwade, Maharashtra|Tilhar, Uttar Pradesh|Sindhnur, Karnataka|Udumalaipettai, Tamil Nadu|Malkapur, Maharashtra|Wanaparthy, Telangana|Gudur, Andhra Pradesh|Kendujhar, Odisha|Mandla, Madhya Pradesh|Mandi, Himachal Pradesh|Nedumangad, Kerala|North Lakhimpur, Assam|Vinukonda, Andhra Pradesh|Tiptur, Karnataka|Gobichettipalayam, Tamil Nadu|Sunabeda, Odisha|Wani, Maharashtra|Upleta, Gujarat|Narasapuram, Andhra Pradesh|Nuzvid, Andhra Pradesh|Tezpur, Assam|Una, Gujarat|Markapur, Andhra Pradesh|Sheopur, Madhya Pradesh|Thiruvarur, Tamil Nadu|Sidhpur, Gujarat|Sahaswan, Uttar Pradesh|Suratgarh, Rajasthan|Shajapur, Madhya Pradesh|Rayagada, Odisha|Lonavla, Maharashtra|Ponnur, Andhra Pradesh|Kagaznagar, Telangana|Gadwal, Telangana|Bhatapara, Chhattisgarh|Kandukur, Andhra Pradesh|Sangareddy, Telangana|Unjha, Gujarat|Lunglei, Mizoram|Karimganj, Assam|Kannur, Kerala|Bobbili, Andhra Pradesh|Mokameh, Bihar|Talegaon Dabhade, Maharashtra|Anjangaon, Maharashtra|Mangrol, Gujarat|Sunam, Punjab|Gangarampur, West Bengal|Thiruvallur, Tamil Nadu|Tirur, Kerala|Rath, Uttar Pradesh|Jatani, Odisha|Viramgam, Gujarat|Rajsamand, Rajasthan|Yanam, Puducherry|Kottayam, Kerala|Panruti, Tamil Nadu|Dhuri, Punjab|Namakkal, Tamil Nadu|Kasaragod, Kerala|Modasa, Gujarat|Rayadurg, Andhra Pradesh|Supaul, Bihar|Kunnamkulam, Kerala|Umred, Maharashtra|Bellampalle, Telangana|Sibsagar, Assam|Mandi Dabwali, Haryana|Ottappalam, Kerala|Dumraon, Bihar|Samalkot, Andhra Pradesh|Jaggaiahpet, Andhra Pradesh|Goalpara, Assam|Tuni, Andhra Pradesh|Lachhmangarh, Rajasthan|Bhongir, Telangana|Amalapuram, Andhra Pradesh|Firozpur Cantt., Punjab|Vikarabad, Telangana|Thiruvalla, Kerala|Sherkot, Uttar Pradesh|Palghar, Maharashtra|Shegaon, Maharashtra|Jangaon, Telangana|Bheemunipatnam, Andhra Pradesh|Panna, Madhya Pradesh|Thodupuzha, Kerala|KathUrban Agglomeration, Jammu and Kashmir|Palitana, Gujarat|Arwal, Bihar|Venkatagiri, Andhra Pradesh|Kalpi, Uttar Pradesh|Rajgarh (Churu), Rajasthan|Sattenapalle, Andhra Pradesh|Arsikere, Karnataka|Ozar, Maharashtra|Thirumangalam, Tamil Nadu|Petlad, Gujarat|Nasirabad, Rajasthan|Phaltan, Maharashtra|Rampurhat, West Bengal|Nanjangud, Karnataka|Forbesganj, Bihar|Tundla, Uttar Pradesh|BhabUrban Agglomeration, Bihar|Sagara, Karnataka|Pithapuram, Andhra Pradesh|Sira, Karnataka|Bhadrachalam, Telangana|Charkhi Dadri, Haryana|Chatra, Jharkhand|Palasa Kasibugga, Andhra Pradesh|Nohar, Rajasthan|Yevla, Maharashtra|Sirhind Fatehgarh Sahib, Punjab|Bhainsa, Telangana|Parvathipuram, Andhra Pradesh|Shahade, Maharashtra|Chalakudy, Kerala|Narkatiaganj, Bihar|Kapadvanj, Gujarat|Macherla, Andhra Pradesh|Raghogarh-Vijaypur, Madhya Pradesh|Rupnagar, Punjab|Naugachhia, Bihar|Sendhwa, Madhya Pradesh|Byasanagar, Odisha|Sandila, Uttar Pradesh|Gooty, Andhra Pradesh|Salur, Andhra Pradesh|Nanpara, Uttar Pradesh|Sardhana, Uttar Pradesh|Vita, Maharashtra|Gumia, Jharkhand|Puttur, Karnataka|Jalandhar Cantt., Punjab|Nehtaur, Uttar Pradesh|Changanassery, Kerala|Mandapeta, Andhra Pradesh|Dumka, Jharkhand|Seohara, Uttar Pradesh|Umarkhed, Maharashtra|Madhupur, Jharkhand|Vikramasingapuram, Tamil Nadu|Punalur, Kerala|Kendrapara, Odisha|Sihor, Gujarat|Nellikuppam, Tamil Nadu|Samana, Punjab|Warora, Maharashtra|Nilambur, Kerala|Rasipuram, Tamil Nadu|Ramnagar, Uttarakhand|Jammalamadugu, Andhra Pradesh|Nawanshahr, Punjab|Thoubal, Manipur|Athni, Karnataka|Cherthala, Kerala|Sidhi, Madhya Pradesh|Farooqnagar, Telangana|Peddapuram, Andhra Pradesh|Chirkunda, Jharkhand|Pachora, Maharashtra|Madhepura, Bihar|Pithoragarh, Uttarakhand|Tumsar, Maharashtra|Phalodi, Rajasthan|Tiruttani, Tamil Nadu|Rampura Phul, Punjab|Perinthalmanna, Kerala|Padrauna, Uttar Pradesh|Pipariya, Madhya Pradesh|Dalli-Rajhara, Chhattisgarh|Punganur, Andhra Pradesh|Mattannur, Kerala|Mathura, Uttar Pradesh|Thakurdwara, Uttar Pradesh|Nandivaram-Guduvancheri, Tamil Nadu|Mulbagal, Karnataka|Manjlegaon, Maharashtra|Wankaner, Gujarat|Sillod, Maharashtra|Nidadavole, Andhra Pradesh|Surapura, Karnataka|Rajagangapur, Odisha|Sheikhpura, Bihar|Parlakhemundi, Odisha|Kalimpong, West Bengal|Siruguppa, Karnataka|Arvi, Maharashtra|Limbdi, Gujarat|Barpeta, Assam|Manglaur, Uttarakhand|Repalle, Andhra Pradesh|Mudhol, Karnataka|Shujalpur, Madhya Pradesh|Mandvi, Gujarat|Thangadh, Gujarat|Sironj, Madhya Pradesh|Nandura, Maharashtra|Shoranur, Kerala|Nathdwara, Rajasthan|Periyakulam, Tamil Nadu|Sultanganj, Bihar|Medak, Telangana|Narayanpet, Telangana|Raxaul Bazar, Bihar|Rajauri, Jammu and Kashmir|Pernampattu, Tamil Nadu|Nainital, Uttarakhand|Ramachandrapuram, Andhra Pradesh|Vaijapur, Maharashtra|Nangal, Punjab|Sidlaghatta, Karnataka|Punch, Jammu and Kashmir|Pandhurna, Madhya Pradesh|Wadgaon Road, Maharashtra|Talcher, Odisha|Varkala, Kerala|Pilani, Rajasthan|Nowgong, Madhya Pradesh|Naila Janjgir, Chhattisgarh|Mapusa, Goa|Vellakoil, Tamil Nadu|Merta City, Rajasthan|Sivaganga, Tamil Nadu|Mandideep, Madhya Pradesh|Sailu, Maharashtra|Vyara, Gujarat|Kovvur, Andhra Pradesh|Vadalur, Tamil Nadu|Nawabganj, Uttar Pradesh|Padra, Gujarat|Sainthia, West Bengal|Siana, Uttar Pradesh|Shahpur, Karnataka|Sojat, Rajasthan|Noorpur, Uttar Pradesh|Paravoor, Kerala|Murtijapur, Maharashtra|Ramnagar, Bihar|Sundargarh, Odisha|Taki, West Bengal|Saundatti-Yellamma, Karnataka|Pathanamthitta, Kerala|Wadi, Karnataka|Rameshwaram, Tamil Nadu|Tasgaon, Maharashtra|Sikandra Rao, Uttar Pradesh|Sihora, Madhya Pradesh|Tiruvethipuram, Tamil Nadu|Tiruvuru, Andhra Pradesh|Mehkar, Maharashtra|Peringathur, Kerala|Perambalur, Tamil Nadu|Manvi, Karnataka|Zunheboto, Nagaland|Mahnar Bazar, Bihar|Attingal, Kerala|Shahbad, Haryana|Puranpur, Uttar Pradesh|Nelamangala, Karnataka|Lunawada, Gujarat|Murshidabad, West Bengal|Mahe, Puducherry|Lanka, Assam|Rudauli, Uttar Pradesh|Tuensang, Nagaland|Lakshmeshwar, Karnataka|Zira, Punjab|Yawal, Maharashtra|Thana Bhawan, Uttar Pradesh|Ramdurg, Karnataka|Pulgaon, Maharashtra|Sadasivpet, Telangana|Nargund, Karnataka|Neem-Ka-Thana, Rajasthan|Memari, West Bengal|Nilanga, Maharashtra|Naharlagun, Arunachal Pradesh|Pakaur, Jharkhand|Wai, Maharashtra|Tarikere, Karnataka|Malavalli, Karnataka|Raisen, Madhya Pradesh|Lahar, Madhya Pradesh|Uravakonda, Andhra Pradesh|Savanur, Karnataka|Sirohi, Rajasthan|Udhampur, Jammu and Kashmir|Umarga, Maharashtra|Pratapgarh, Rajasthan|Lingsugur, Karnataka|Usilampatti, Tamil Nadu|Palia Kalan, Uttar Pradesh|Wokha, Nagaland|Rajpipla, Gujarat|Vijayapura, Karnataka|Rawatbhata, Rajasthan|Sangaria, Rajasthan|Paithan, Maharashtra|Rahuri, Maharashtra|Patti, Punjab|Zaidpur, Uttar Pradesh|Lalsot, Rajasthan|Maihar, Madhya Pradesh|Vedaranyam, Tamil Nadu|Nawapur, Maharashtra|Solan, Himachal Pradesh|Sanawad, Madhya Pradesh|Warisaliganj, Bihar|Revelganj, Bihar|Sabalgarh, Madhya Pradesh|Tuljapur, Maharashtra|Simdega, Jharkhand|Musabani, Jharkhand|Kodungallur, Kerala|Phulabani, Odisha|Umreth, Gujarat|Narsipatnam, Andhra Pradesh|Nautanwa, Uttar Pradesh|Rajgir, Bihar|Yellandu, Telangana|Sathyamangalam, Tamil Nadu|Pilibanga, Rajasthan|Morshi, Maharashtra|Pehowa, Haryana|Sonepur, Bihar|Pappinisseri, Kerala|Zamania, Uttar Pradesh|Mihijam, Jharkhand|Purna, Maharashtra|Puliyankudi, Tamil Nadu|Shikarpur, Bulandshahr, Uttar Pradesh|Umaria, Madhya Pradesh|Porsa, Madhya Pradesh|Naugawan Sadat, Uttar Pradesh|Fatehpur Sikri, Uttar Pradesh|Manuguru, Telangana|Udaipur, Tripura|Pipar City, Rajasthan|Pattamundai, Odisha|Nanjikottai, Tamil Nadu|Taranagar, Rajasthan|Yerraguntla, Andhra Pradesh|Satana, Maharashtra|Sherghati, Bihar|Sankeshwara, Karnataka|Madikeri, Karnataka|Thuraiyur, Tamil Nadu|Sanand, Gujarat|Rajula, Gujarat|Kyathampalle, Telangana|Shahabad, Rampur, Uttar Pradesh|Tilda Newra, Chhattisgarh|Narsinghgarh, Madhya Pradesh|Chittur-Thathamangalam, Kerala|Malaj Khand, Madhya Pradesh|Sarangpur, Madhya Pradesh|Robertsganj, Uttar Pradesh|Sirkali, Tamil Nadu|Radhanpur, Gujarat|Tiruchendur, Tamil Nadu|Utraula, Uttar Pradesh|Patratu, Jharkhand|Vijainagar, Ajmer, Rajasthan|Periyasemur, Tamil Nadu|Pathri, Maharashtra|Sadabad, Uttar Pradesh|Talikota, Karnataka|Sinnar, Maharashtra|Mungeli, Chhattisgarh|Sedam, Karnataka|Shikaripur, Karnataka|Sumerpur, Rajasthan|Sattur, Tamil Nadu|Sugauli, Bihar|Lumding, Assam|Vandavasi, Tamil Nadu|Titlagarh, Odisha|Uchgaon, Maharashtra|Mokokchung, Nagaland|Paschim Punropara, West Bengal|Sagwara, Rajasthan|Ramganj Mandi, Rajasthan|Tarakeswar, West Bengal|Mahalingapura, Karnataka|Dharmanagar, Tripura|Mahemdabad, Gujarat|Manendragarh, Chhattisgarh|Uran, Maharashtra|Tharamangalam, Tamil Nadu|Tirukkoyilur, Tamil Nadu|Pen, Maharashtra|Makhdumpur, Bihar|Maner, Bihar|Oddanchatram, Tamil Nadu|Palladam, Tamil Nadu|Mundi, Madhya Pradesh|Nabarangapur, Odisha|Mudalagi, Karnataka|Samalkha, Haryana|Nepanagar, Madhya Pradesh|Karjat, Maharashtra|Ranavav, Gujarat|Pedana, Andhra Pradesh|Pinjore, Haryana|Lakheri, Rajasthan|Pasan, Madhya Pradesh|Puttur, Andhra Pradesh|Vadakkuvalliyur, Tamil Nadu|Tirukalukundram, Tamil Nadu|Mahidpur, Madhya Pradesh|Mussoorie, Uttarakhand|Muvattupuzha, Kerala|Rasra, Uttar Pradesh|Udaipurwati, Rajasthan|Manwath, Maharashtra|Adoor, Kerala|Uthamapalayam, Tamil Nadu|Partur, Maharashtra|Nahan, Himachal Pradesh|Ladwa, Haryana|Mankachar, Assam|Nongstoin, Meghalaya|Losal, Rajasthan|Sri Madhopur, Rajasthan|Ramngarh, Rajasthan|Mavelikkara, Kerala|Rawatsar, Rajasthan|Rajakhera, Rajasthan|Lar, Uttar Pradesh|Lal Gopalganj Nindaura, Uttar Pradesh|Muddebihal, Karnataka|Sirsaganj, Uttar Pradesh|Shahpura, Rajasthan|Surandai, Tamil Nadu|Sangole, Maharashtra|Pavagada, Karnataka|Tharad, Gujarat|Mansa, Gujarat|Umbergaon, Gujarat|Mavoor, Kerala|Nalbari, Assam|Talaja, Gujarat|Malur, Karnataka|Mangrulpir, Maharashtra|Soro, Odisha|Vadnagar, Gujarat|Raisinghnagar, Rajasthan|Sindhagi, Karnataka|Sanduru, Karnataka|Sohna, Haryana|Manavadar, Gujarat|Pihani, Uttar Pradesh|Safidon, Haryana|Risod, Maharashtra|Rosera, Bihar|Sankari, Tamil Nadu|Malpura, Rajasthan|Sonamukhi, West Bengal|Shamsabad, Agra, Uttar Pradesh|Nokha, Bihar|PandUrban Agglomeration, West Bengal|Mainaguri, West Bengal|Afzalpur, Karnataka|Shirur, Maharashtra|Salaya, Gujarat|Shenkottai, Tamil Nadu|Pratapgarh, Tripura|Vadipatti, Tamil Nadu|Nagarkurnool, Telangana|Savner, Maharashtra|Sasvad, Maharashtra|Rudrapur, Uttar Pradesh|Soron, Uttar Pradesh|Sholingur, Tamil Nadu|Pandharkaoda, Maharashtra|Perumbavoor, Kerala|Maddur, Karnataka|Nadbai, Rajasthan|Talode, Maharashtra|Shrigonda, Maharashtra|Madhugiri, Karnataka|Tekkalakote, Karnataka|Seoni-Malwa, Madhya Pradesh|Shirdi, Maharashtra|SUrban Agglomerationr, Uttar Pradesh|Terdal, Karnataka|Raver, Maharashtra|Taraori, Haryana|Mukhed, Maharashtra|Manachanallur, Tamil Nadu|Rehli, Madhya Pradesh|Sanchore, Rajasthan|Rajura, Maharashtra|Piro, Bihar|Mudabidri, Karnataka|Vadgaon Kasba, Maharashtra|Nagar, Rajasthan|Vijapur, Gujarat|Viswanatham, Tamil Nadu|Polur, Tamil Nadu|Panagudi, Tamil Nadu|Manawar, Madhya Pradesh|Tehri, Uttarakhand|Samdhan, Uttar Pradesh|Pardi, Gujarat|Rahatgarh, Madhya Pradesh|Panagar, Madhya Pradesh|Uthiramerur, Tamil Nadu|Tirora, Maharashtra|Rangia, Assam|Sahjanwa, Uttar Pradesh|Wara Seoni, Madhya Pradesh|Magadi, Karnataka|Rajgarh (Alwar), Rajasthan|Rafiganj, Bihar|Tarana, Madhya Pradesh|Rampur Maniharan, Uttar Pradesh|Sheoganj, Rajasthan|Raikot, Punjab|Pauri, Uttarakhand|Sumerpur, Uttar Pradesh|Navalgund, Karnataka|Shahganj, Uttar Pradesh|Marhaura, Bihar|Tulsipur, Uttar Pradesh|Sadri, Rajasthan|Thiruthuraipoondi, Tamil Nadu|Shiggaon, Karnataka|Pallapatti, Tamil Nadu|Mahendragarh, Haryana|Sausar, Madhya Pradesh|Ponneri, Tamil Nadu|Mahad, Maharashtra|Lohardaga, Jharkhand|Tirwaganj, Uttar Pradesh|Margherita, Assam|Sundarnagar, Himachal Pradesh|Rajgarh, Madhya Pradesh|Mangaldoi, Assam|Renigunta, Andhra Pradesh|Longowal, Punjab|Ratia, Haryana|Lalgudi, Tamil Nadu|Shrirangapattana, Karnataka|Niwari, Madhya Pradesh|Natham, Tamil Nadu|Unnamalaikadai, Tamil Nadu|PurqUrban Agglomerationzi, Uttar Pradesh|Shamsabad, Farrukhabad, Uttar Pradesh|Mirganj, Bihar|Todaraisingh, Rajasthan|Warhapur, Uttar Pradesh|Rajam, Andhra Pradesh|Urmar Tanda, Punjab|Lonar, Maharashtra|Powayan, Uttar Pradesh|P.N.Patti, Tamil Nadu|Palampur, Himachal Pradesh|Srisailam Project (Right Flank Colony) Township, Andhra Pradesh|Sindagi, Karnataka|Sandi, Uttar Pradesh|Vaikom, Kerala|Malda, West Bengal|Tharangambadi, Tamil Nadu|Sakaleshapura, Karnataka|Lalganj, Bihar|Malkangiri, Odisha|Rapar, Gujarat|Mauganj, Madhya Pradesh|Todabhim, Rajasthan|Srinivaspur, Karnataka|Murliganj, Bihar|Reengus, Rajasthan|Sawantwadi, Maharashtra|Tittakudi, Tamil Nadu|Lilong, Manipur|Rajaldesar, Rajasthan|Pathardi, Maharashtra|Achhnera, Uttar Pradesh|Pacode, Tamil Nadu|Naraura, Uttar Pradesh|Nakur, Uttar Pradesh|Palai, Kerala|Morinda, India, Punjab|Manasa, Madhya Pradesh|Nainpur, Madhya Pradesh|Sahaspur, Uttar Pradesh|Pauni, Maharashtra|Prithvipur, Madhya Pradesh|Ramtek, Maharashtra|Silapathar, Assam|Songadh, Gujarat|Safipur, Uttar Pradesh|Sohagpur, Madhya Pradesh|Mul, Maharashtra|Sadulshahar, Rajasthan|Phillaur, Punjab|Sambhar, Rajasthan|Prantij, Rajasthan|Nagla, Uttarakhand|Pattran, Punjab|Mount Abu, Rajasthan|Reoti, Uttar Pradesh|Tenu dam-cum-Kathhara, Jharkhand|Panchla, West Bengal|Sitarganj, Uttarakhand|Pasighat, Arunachal Pradesh|Motipur, Bihar|O' Valley, Tamil Nadu|Raghunathpur, West Bengal|Suriyampalayam, Tamil Nadu|Qadian, Punjab|Rairangpur, Odisha|Silvassa, Dadra and Nagar Haveli|Nowrozabad (Khodargama), Madhya Pradesh|Mangrol, Rajasthan|Soyagaon, Maharashtra|Sujanpur, Punjab|Manihari, Bihar|Sikanderpur, Uttar Pradesh|Mangalvedhe, Maharashtra|Phulera, Rajasthan|Ron, Karnataka|Sholavandan, Tamil Nadu|Saidpur, Uttar Pradesh|Shamgarh, Madhya Pradesh|Thammampatti, Tamil Nadu|Maharajpur, Madhya Pradesh|Multai, Madhya Pradesh|Mukerian, Punjab|Sirsi, Uttar Pradesh|Purwa, Uttar Pradesh|Sheohar, Bihar|Namagiripettai, Tamil Nadu|Parasi, Uttar Pradesh|Lathi, Gujarat|Lalganj, Uttar Pradesh|Narkhed, Maharashtra|Mathabhanga, West Bengal|Shendurjana, Maharashtra|Peravurani, Tamil Nadu|Mariani, Assam|Phulpur, Uttar Pradesh|Rania, Haryana|Pali, Madhya Pradesh|Pachore, Madhya Pradesh|Parangipettai, Tamil Nadu|Pudupattinam, Tamil Nadu|Panniyannur, Kerala|Maharajganj, Bihar|Rau, Madhya Pradesh|Monoharpur, West Bengal|Mandawa, Rajasthan|Marigaon, Assam|Pallikonda, Tamil Nadu|Pindwara, Rajasthan|Shishgarh, Uttar Pradesh|Patur, Maharashtra|Mayang Imphal, Manipur|Mhowgaon, Madhya Pradesh|Guruvayoor, Kerala|Mhaswad, Maharashtra|Sahawar, Uttar Pradesh|Sivagiri, Tamil Nadu|Mundargi, Karnataka|Punjaipugalur, Tamil Nadu|Kailasahar, Tripura|Samthar, Uttar Pradesh|Sakti, Chhattisgarh|Sadalagi, Karnataka|Silao, Bihar|Mandalgarh, Rajasthan|Loha, Maharashtra|Pukhrayan, Uttar Pradesh|Padmanabhapuram, Tamil Nadu|Belonia, Tripura|Saiha, Mizoram|Srirampore, West Bengal|Talwara, Punjab|Puthuppally, Kerala|Khowai, Tripura|Vijaypur, Madhya Pradesh|Takhatgarh, Rajasthan|Thirupuvanam, Tamil Nadu|Adra, West Bengal|Piriyapatna, Karnataka|Obra, Uttar Pradesh|Adalaj, Gujarat|Nandgaon, Maharashtra|Barh, Bihar|Chhapra, Gujarat|Panamattom, Kerala|Niwai, Uttar Pradesh|Bageshwar, Uttarakhand|Tarbha, Odisha|Adyar, Karnataka|Warud, Maharashtra|Asarganj, Bihar|Sarsod, Haryana|Bangalore, Karnataka".split('|');   // City, State
+        const cityInput = document.getElementById('user-city');
+        const cityDropdown = document.getElementById('city-dropdown');
+        
+        function populateCities(filterText = '') {
+            cityDropdown.innerHTML = '';
+            const q = filterText.trim().toLowerCase();
+            const filtered = cities.filter(c => c.toLowerCase().includes(q)).sort((a, b) => (b.toLowerCase().startsWith(q) - a.toLowerCase().startsWith(q))).slice(0, 40);
+            if(filtered.length === 0) {
+                cityDropdown.innerHTML = '<div class="p-3 text-vibe font-bold">No cities found</div>';
+            } else {
+                filtered.forEach(city => {
+                    const div = document.createElement('div');
+                    div.className = 'p-4 text-vibe font-bold hover:bg-yellow cursor-pointer border-b-2 border-gray-100 uppercase transition-colors';
+                    div.innerText = city;
+                    div.onclick = () => {
+                        cityInput.value = city;
+                        cityDropdown.classList.add('hidden');
+                    };
+                    cityDropdown.appendChild(div);
+                });
+            }
+        }
+        
+        cityInput.addEventListener('focus', () => {
+            populateCities(cityInput.value);
+            cityDropdown.classList.remove('hidden');
+        });
+        cityInput.addEventListener('input', (e) => {
+            populateCities(e.target.value);
+            cityDropdown.classList.remove('hidden');
+        });
+        document.addEventListener('click', (e) => {
+            if(!cityInput.contains(e.target) && !cityDropdown.contains(e.target)) {
+                cityDropdown.classList.add('hidden');
+            }
+        });
+
+        // --- GOOGLE SHEETS CONNECTION ---
+        // Paste your Apps Script Web App URL between the quotes (see setup guide)
+        const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbw4yHrxyMCJzhb3S4vqO-BH1dyWw0UjJSTE-vgKO4Lt-nRaVR3oSxFI4RjdrTbEuFJM/exec';
+
+        async function sheetsCall(payload) {
+            if (!SHEETS_URL) return { ok: false, error: 'Google Sheet not connected yet' };
+            try {
+                const res = await fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) });
+                return await res.json();
+            } catch (err) {
+                console.error('Sheets error:', err);
+                return { ok: false, error: 'Network error, try again' };
+            }
+        }
+
+        // --- LOYALTY DASHBOARD ---
+        document.getElementById('user-dob').max = new Date().toISOString().slice(0, 10);
+        const $ = (id) => document.getElementById(id);
+        const dashModal = $('dashboard-modal'), loyaltyCard = $('loyalty-card'), staffForm = $('staff-form'), staffMsg = $('staff-msg');
+        let dashProfile = null;
+
+        const fmtDay = (iso) => { const d = new Date(iso); return (!iso || isNaN(d)) ? '-' : d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); };
+        const fmtDob = (dob) => { if (!dob) return '-'; if (!/^\d{4}-\d{2}-\d{2}$/.test(dob)) return dob; const [y, m, d] = dob.split('-').map(Number); return new Date(y, m - 1, d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }); };
+
+        function renderCard() {
+            const p = dashProfile; if (!p) return;
+            $('dash-greeting').innerText = p.welcome ? 'Welcome, ' + p.name.split(' ')[0] + '! Your VIP card is ready' : 'Hi, ' + p.name.split(' ')[0];
+            $('card-name').innerText = p.name;
+            $('card-phone').innerText = p.phone.length === 10 ? p.phone.slice(0, 5) + ' ' + p.phone.slice(5) : p.phone;
+            $('card-dob').innerText = fmtDob(p.dob);
+            $('card-city').innerText = p.city;
+            $('card-login').innerText = fmtDay(p.lastLogin);
+            $('card-joined').innerText = fmtDay(p.joined);
+            $('profile-name-display').innerText = p.name; $('profile-city-display').innerText = p.city;
+            $('card-points').innerText = typeof p.points === 'number' ? p.points.toLocaleString('en-IN') : '-';
+        }
+        function closeDashboard() {
+            if (dashProfile) delete dashProfile.welcome;
+            dashModal.classList.add('hidden'); dashModal.classList.remove('flex');
+            staffForm.classList.add('hidden'); staffForm.classList.remove('flex'); staffForm.reset(); staffMsg.innerText = '';
+        }
+        function setDashProfile(p) {
+            if (!p) { dashProfile = null; closeDashboard(); return; }
+            const same = dashProfile && dashProfile.phone === p.phone;
+            dashProfile = { ...(same ? dashProfile : {}), ...p };
+            renderCard();
+            if (!same) refreshPoints();
+        }
+        // Google Sheet is the master copy: name, city, birthday and points from the sheet show on the card
+        function applySheet(res) {
+            if (!res.ok || !dashProfile || res.found === false) return;
+            ['name', 'city', 'dob', 'joined'].forEach((k) => { if (res[k]) dashProfile[k] = res[k]; });
+            dashProfile.points = res.points; renderCard();
+        }
+        async function refreshPoints() {
+            if (!dashProfile) return;
+            applySheet(await sheetsCall({ action: 'getPoints', phone: dashProfile.phone }));
+        }
+        function openDashboard() {
+            if (!dashProfile) return;
+            renderCard(); loyaltyCard.classList.remove('flipped');
+            if (welcomeNew) { welcomeNew = false; celebrate(); }
+            updatePushUI();
+            if ('Notification' in window && Notification.permission === 'granted') enablePush(false);
+            dashModal.classList.remove('hidden'); dashModal.classList.add('flex');
+            refreshPoints();
+        }
+        // Saves the customer + today's login to Google Sheets
+        async function registerVisit(p) {
+            const res = await sheetsCall({ action: 'login', phone: p.phone, name: p.name, city: p.city, dob: p.dob });
+            applySheet(res);
+        }
+
+        $('open-dashboard-btn').addEventListener('click', openDashboard);
+        $('close-dashboard-btn').addEventListener('click', closeDashboard);
+        loyaltyCard.addEventListener('click', () => loyaltyCard.classList.toggle('flipped'));
+        $('staff-toggle-btn').addEventListener('click', () => { staffForm.classList.toggle('hidden'); staffForm.classList.toggle('flex'); });
+
+        staffForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const bill = parseFloat($('staff-bill').value) || 0, pts = parseInt($('staff-points').value, 10) || 0;
+            if (!dashProfile || (!bill && !pts)) { staffMsg.innerText = 'Enter bill amount or points'; return; }
+            const btn = $('staff-submit-btn'); btn.disabled = true; staffMsg.innerText = 'Updating sheet...';
+            const p = dashProfile;
+            const res = await sheetsCall({ action: 'addPoints', phone: p.phone, name: p.name, city: p.city, dob: p.dob, password: $('staff-password').value, bill, points: pts });
+            btn.disabled = false;
+            if (res.ok) {
+                applySheet(res); $('staff-bill').value = ''; $('staff-points').value = '';
+                staffMsg.innerText = (res.earned > 0 ? '+' : '') + res.earned + ' points done. Total: ' + res.points;
+                loyaltyCard.classList.add('flipped');
+            } else {
+                staffMsg.innerText = res.error || 'Failed';
+            }
+        });
+
+        // --- PUSH NOTIFICATIONS (Firebase Cloud Messaging) ---
+        // Fill these from your Firebase project (see setup guide)
+        const PUSH_CONFIG = { apiKey: '', authDomain: '', projectId: '', messagingSenderId: '', appId: '' };
+        const VAPID_KEY = '';
+        const pushBtn = $('push-btn');
+        const FB = 'https://www.gstatic.com/firebasejs/11.6.1/';
+
+        function updatePushUI() {
+            const ok = 'Notification' in window && 'serviceWorker' in navigator && PUSH_CONFIG.apiKey && VAPID_KEY;
+            pushBtn.classList.toggle('hidden', !(ok && Notification.permission === 'default'));
+        }
+        async function enablePush(ask) {
+            if (!dashProfile || !PUSH_CONFIG.apiKey || !VAPID_KEY || !('Notification' in window) || !('serviceWorker' in navigator)) return;
+            try {
+                if (Notification.permission === 'default' && ask) await Notification.requestPermission();
+                if (Notification.permission === 'granted') {
+                    const { initializeApp, getApps } = await import(FB + 'firebase-app.js');
+                    const { getMessaging, getToken } = await import(FB + 'firebase-messaging.js');
+                    const reg = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+                    const app = getApps().find((a) => a.name === 'push') || initializeApp(PUSH_CONFIG, 'push');
+                    const token = await getToken(getMessaging(app), { vapidKey: VAPID_KEY, serviceWorkerRegistration: reg });
+                    if (token) await sheetsCall({ action: 'saveToken', phone: dashProfile.phone, token });
+                }
+            } catch (err) { console.error('Push error:', err); }
+            updatePushUI();
+        }
+        pushBtn.addEventListener('click', () => enablePush(true));
+
+        // --- ADMIN PANEL ---
+        const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const adminModal = $('admin-modal'), editForm = $('admin-edit');
+        let adminPass = '', adminRows = [], editPhone = '';
+        const toggle = (el, on, cls = 'flex') => { el.classList.toggle('hidden', !on); el.classList.toggle(cls, on); };
+
+        function adminClose() {
+            if (location.hash === '#admin') history.replaceState(null, '', location.pathname + location.search);
+            toggle(adminModal, false); adminPass = ''; adminRows = [];
+            $('admin-login').classList.remove('hidden'); $('admin-login').reset(); $('admin-msg').innerText = '';
+            $('admin-panel').classList.add('hidden'); toggle(editForm, false);
+        }
+        function adminSummary() {
+            const now = new Date(), mon = now.getMonth() + 1, yr = now.getFullYear(), week = Date.now() - 7 * 864e5;
+            const bd = adminRows.map((r) => /^\d{4}-\d{2}-\d{2}$/.test(r.dob) ? r.dob.split('-').map(Number) : null).filter(Boolean);
+            const joined = adminRows.filter((r) => { const d = new Date(r.joined); return d.getMonth() + 1 === mon && d.getFullYear() === yr; }).length;
+            const items = [
+                ['Customers', adminRows.length],
+                ['Total points', adminRows.reduce((a, r) => a + r.points, 0).toLocaleString('en-IN')],
+                ['Active this week', adminRows.filter((r) => new Date(r.lastLogin).getTime() > week).length],
+                ['New this month', joined],
+                ['Birthdays today', bd.filter((b) => b[1] === mon && b[2] === now.getDate()).length],
+                ['Birthdays this month', bd.filter((b) => b[1] === mon).length]
+            ];
+            $('admin-summary').innerHTML = items.map(([l, v]) => `<div class="bg-white text-vibe p-3 text-center border-4 border-yellow"><p class="font-anton text-4xl leading-none">${esc(v)}</p><p class="font-black text-xs uppercase mt-1">${l}</p></div>`).join('');
+        }
+        function adminRender() {
+            const q = $('admin-search').value.trim().toLowerCase();
+            const rows = adminRows.filter((r) => !q || (r.name + r.phone + r.city).toLowerCase().includes(q)).slice().reverse();
+            $('admin-list').innerHTML = rows.length ? rows.map((r) => `<div data-phone="${esc(r.phone)}" class="flex items-center justify-between gap-3 p-3 border-b-2 border-gray-200 hover:bg-yellow cursor-pointer"><div class="min-w-0"><p class="font-anton text-xl uppercase truncate">${esc(r.name) || '(no name)'}</p><p class="font-bold text-sm">${esc(r.phone)} &middot; ${esc(r.city)} &middot; DOB ${esc(fmtDob(r.dob))}</p><p class="text-xs font-bold opacity-60">Last login ${esc(fmtDay(r.lastLogin))} &middot; ${esc(r.visits)} visits</p></div><div class="font-anton text-3xl shrink-0">${esc(r.points)}</div></div>`).join('') : '<p class="p-4 font-bold">No customers found</p>';
+        }
+        async function adminLoad() {
+            const res = await sheetsCall({ action: 'adminList', password: adminPass });
+            if (res.ok) { adminRows = res.rows; $('admin-sheet').href = res.sheetUrl; adminSummary(); adminRender(); if (res.settings) { siteSettings = res.settings; renderBanner(); adminFestival(); $('af-text').value = siteSettings.festivalMsg || ''; } }
+            return res;
+        }
+        const adminPut = (r) => { const i = adminRows.findIndex((x) => x.phone === r.phone); if (i > -1) adminRows[i] = r; adminSummary(); adminRender(); };
+
+        $('admin-fab').addEventListener('click', () => toggle(adminModal, true));
+        $('admin-close').addEventListener('click', adminClose);
+        $('admin-search').addEventListener('input', adminRender);
+        $('admin-refresh').addEventListener('click', adminLoad);
+        $('ae-cancel').addEventListener('click', () => toggle(editForm, false));
+        $('admin-login').addEventListener('submit', async (e) => {
+            e.preventDefault(); adminPass = $('admin-pass').value; $('admin-msg').innerText = 'Checking...';
+            const res = await adminLoad();
+            if (res.ok) { e.target.classList.add('hidden'); $('admin-panel').classList.remove('hidden'); }
+            else { adminPass = ''; $('admin-msg').innerText = res.error || 'Failed'; }
+        });
+        $('admin-list').addEventListener('click', (e) => {
+            const row = e.target.closest('[data-phone]'); if (!row) return;
+            const r = adminRows.find((x) => x.phone === row.dataset.phone); if (!r) return;
+            editPhone = r.phone; $('ae-phone').innerText = r.phone; $('ae-msg').innerText = '';
+            $('ae-name').value = r.name; $('ae-city').value = r.city; $('ae-points').value = r.points; $('ae-bill').value = '';
+            $('ae-dob').value = /^\d{4}-\d{2}-\d{2}$/.test(r.dob) ? r.dob : '';
+            toggle(editForm, true); editForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); const old = adminRows.find((x) => x.phone === editPhone); $('ae-msg').innerText = 'Saving to sheet...';
+            const res = await sheetsCall({ action: 'adminUpdate', password: adminPass, phone: editPhone, name: $('ae-name').value.trim(), city: $('ae-city').value.trim(), dob: $('ae-dob').value || (old && old.dob) || '', points: $('ae-points').value });
+            if (res.ok) { adminPut(res.row); $('ae-msg').innerText = 'Saved'; } else $('ae-msg').innerText = res.error || 'Failed';
+        });
+        $('ae-bill-btn').addEventListener('click', async () => {
+            const bill = parseFloat($('ae-bill').value) || 0; if (!bill) { $('ae-msg').innerText = 'Enter bill amount'; return; }
+            $('ae-msg').innerText = 'Adding...';
+            const res = await sheetsCall({ action: 'addPoints', password: adminPass, phone: editPhone, bill });
+            if (res.ok) {
+                const r = adminRows.find((x) => x.phone === editPhone); if (r) { r.points = res.points; adminPut(r); }
+                $('ae-points').value = res.points; $('ae-bill').value = ''; $('ae-msg').innerText = '+' + res.earned + ' points. Total ' + res.points;
+            } else $('ae-msg').innerText = res.error || 'Failed';
+        });
+
+        // --- FESTIVALS (edit this list any time: [date, name, emoji]) ---
+        const FESTIVALS = [
+            ['2026-11-06', 'Dhanteras', '🪙'], ['2026-11-08', 'Diwali', '🪔'], ['2026-11-09', 'Govardhan Puja', '🐄'],
+            ['2026-11-11', 'Bhai Dooj', '👫'], ['2026-11-24', 'Guru Nanak Gurpurab', '🙏'], ['2026-12-25', 'Christmas', '🎄'],
+            ['2027-01-01', 'New Year', '🎉'], ['2027-01-06', 'Guru Gobind Singh Jayanti', '🙏'], ['2027-01-13', 'Lohri', '🔥'],
+            ['2027-01-14', 'Makar Sankranti', '🪁'], ['2027-01-26', 'Republic Day', '🇮🇳'], ['2027-02-11', 'Vasant Panchami', '🌼'],
+            ['2027-03-06', 'Maha Shivratri', '🔱'], ['2027-03-10', 'Eid al-Fitr', '🌙'], ['2027-03-21', 'Holika Dahan', '🔥'],
+            ['2027-03-22', 'Holi', '🎨'], ['2027-04-14', 'Baisakhi', '🌾'], ['2027-04-15', 'Ram Navami', '🏹'],
+            ['2027-08-15', 'Independence Day', '🇮🇳'], ['2027-08-17', 'Raksha Bandhan', '🧵'], ['2027-08-25', 'Janmashtami', '🦚'],
+            ['2027-09-04', 'Ganesh Chaturthi', '🐘'], ['2027-09-30', 'Navratri', '🪔'], ['2027-10-09', 'Dussehra', '🏹'],
+            ['2027-10-27', 'Dhanteras', '🪙'], ['2027-10-29', 'Diwali', '🪔'], ['2027-11-14', 'Guru Nanak Gurpurab', '🙏'],
+            ['2027-12-25', 'Christmas', '🎄']
+        ];
+        let siteSettings = { festivalOn: false, festivalMsg: '' };
+        const ymd = (d) => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        const festToday = () => FESTIVALS.filter((f) => f[0] === ymd(new Date()));
+
+        function renderBanner() {
+            const t = festToday(), show = siteSettings.festivalOn && t.length > 0;
+            $('festival-banner').classList.toggle('hidden', !show);
+            if (show) {
+                $('fb-title').innerText = t.map((f) => f[2] + ' Happy ' + f[1] + '! ' + f[2]).join('  ');
+                $('fb-msg').innerText = siteSettings.festivalMsg || '';
+            }
+        }
+        function adminFestival() {
+            const t = festToday(), on = siteSettings.festivalOn, nx = FESTIVALS.filter((f) => f[0] > ymd(new Date())).slice(0, 3);
+            $('af-today').innerText = t.length ? t.map((f) => f[2] + ' ' + f[1]).join(' & ') : 'No festival today';
+            $('af-next').innerText = nx.length ? 'Next: ' + nx.map((f) => f[1] + ' (' + fmtDob(f[0]) + ')').join(' · ') : 'Add more festival dates in the code';
+            $('af-toggle').innerText = 'Website banner: ' + (on ? 'ON' : 'OFF');
+            $('af-toggle').className = 'font-anton text-lg px-4 py-2 border-4 border-vibe uppercase whitespace-nowrap cursor-pointer ' + (on ? 'bg-vibe text-white' : 'bg-white text-vibe');
+            $('af-msg').innerText = (on && !t.length) ? 'Banner shows only on festival days' : '';
+        }
+        async function saveFestival(on) {
+            $('af-msg').innerText = 'Saving...';
+            const res = await sheetsCall({ action: 'adminSetting', password: adminPass, festivalOn: on, festivalMsg: $('af-text').value.trim() });
+            if (res.ok) { siteSettings = res.settings; renderBanner(); adminFestival(); $('af-msg').innerText = 'Saved'; }
+            else $('af-msg').innerText = res.error || 'Failed';
+        }
+        $('af-toggle').addEventListener('click', () => saveFestival(!siteSettings.festivalOn));
+        $('af-text').addEventListener('change', () => saveFestival(siteSettings.festivalOn));
+        (async () => { const res = await sheetsCall({ action: 'getSettings' }); if (res.ok) { siteSettings = res; renderBanner(); } })();
+
+        // --- COUNTER QR PAGE + PAGE LINKS (#home #products #deals #vip #contact #visit #qr) ---
+        function openQr() {
+            const url = location.href.split('#')[0], box = $('qr-code');
+            $('qr-url').innerText = url; box.innerHTML = '';
+            if (window.QRCode) new QRCode(box, { text: url, width: 300, height: 300, colorDark: '#7a0000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+            toggle($('qr-page'), true);
+        }
+        const closeQr = () => toggle($('qr-page'), false);
+        $('qr-print').addEventListener('click', () => window.print());
+        $('qr-close').addEventListener('click', () => { history.replaceState(null, '', location.pathname + location.search); closeQr(); });
+        function route() {
+            if (location.hash === '#qr') openQr(); else closeQr();
+            if (location.hash === '#admin') { toggle(adminModal, true); setTimeout(() => $('admin-pass').focus(), 50); }
+        }
+        window.addEventListener('hashchange', route); route();
+
+        // --- LOGIN STEPS: phone first, details only for new numbers ---
+        let welcomeNew = false, loginBypass = false;
+        const loginFormEl = $('login-form'), stepPhone = $('step-phone'), stepDetails = $('step-details');
+        const phoneInput = $('user-phone'), contBtn = $('continue-btn');
+        const showErr = (id, msg) => { const el = $(id); el.innerText = msg; el.classList.toggle('hidden', !msg); };
+
+        // Birthday dropdowns (day / month / year)
+        const dobD = $('dob-d'), dobM = $('dob-m'), dobY = $('dob-y'), y0 = new Date().getFullYear();
+        dobD.innerHTML = '<option value="">Day</option>' + Array.from({ length: 31 }, (_, i) => `<option>${i + 1}</option>`).join('');
+        dobM.innerHTML = '<option value="">Month</option>' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map((m, i) => `<option value="${i + 1}">${m}</option>`).join('');
+        dobY.innerHTML = '<option value="">Year</option>' + Array.from({ length: y0 - 10 - 1925 + 1 }, (_, i) => `<option>${y0 - 10 - i}</option>`).join('');
+        function syncDob() {
+            const d = +dobD.value, m = +dobM.value, y = +dobY.value; $('user-dob').value = '';
+            if (d && m && y) {
+                const t = new Date(y, m - 1, d);
+                if (t.getFullYear() === y && t.getMonth() === m - 1 && t.getDate() === d) $('user-dob').value = y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+            }
+        }
+        [dobD, dobM, dobY].forEach((el) => el.addEventListener('change', syncDob));
+
+        function goStep(n) {
+            toggle(stepPhone, n === 1); toggle(stepDetails, n === 2);
+            $('login-sub').innerText = n === 1 ? 'Unlock Exclusive Store Deals' : 'New here? Tell us about you';
+            $('shown-phone').innerText = phoneInput.value;
+            contBtn.innerText = 'CONTINUE'; contBtn.disabled = false;
+        }
+        async function continueLogin() {
+            const phone = phoneInput.value;
+            if (phone.length !== 10) { showErr('phone-error', 'Enter a 10-digit number'); phoneInput.focus(); return; }
+            contBtn.innerText = 'CHECKING...'; contBtn.disabled = true;
+            const res = await sheetsCall({ action: 'getPoints', phone });
+            if (res.ok && res.found && res.name && res.city) {   // already registered: log in straight away
+                $('user-name').value = res.name; $('user-city').value = res.city; $('user-dob').value = res.dob || '';
+                loginBypass = true; loginFormEl.requestSubmit();
+                setTimeout(() => { contBtn.innerText = 'CONTINUE'; contBtn.disabled = false; }, 4000);
+            } else { goStep(2); $('user-name').focus(); }
+        }
+        phoneInput.addEventListener('input', () => { phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10); showErr('phone-error', ''); });
+        phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); continueLogin(); } });
+        contBtn.addEventListener('click', continueLogin);
+        $('change-number-btn').addEventListener('click', () => goStep(1));
+        // Runs before the login handlers below; lets them through only when everything is filled in
+        loginFormEl.addEventListener('submit', (e) => {
+            if (loginBypass) { loginBypass = false; return; }
+            e.preventDefault(); e.stopImmediatePropagation();
+            if (stepDetails.classList.contains('hidden')) { continueLogin(); return; }
+            const err = !$('user-name').value.trim() ? 'Please enter your name' : !$('user-dob').value ? 'Choose a valid date of birth' : !$('user-city').value.trim() ? 'Choose your city' : '';
+            showErr('detail-error', err);
+            if (!err) { welcomeNew = true; loginBypass = true; loginFormEl.requestSubmit(); }
+        });
+        loginFormEl.addEventListener('reset', () => setTimeout(() => { $('user-dob').value = ''; showErr('phone-error', ''); showErr('detail-error', ''); goStep(1); }, 0));
+
+        // Welcome moment for brand-new customers
+        function celebrate() {
+            if (!dashProfile) return;
+            dashProfile.welcome = true; renderCard();
+            const sc = document.querySelector('.card-scene'); sc.classList.remove('card-welcome'); void sc.offsetWidth; sc.classList.add('card-welcome');
+            if (window.confetti) {
+                const o = { colors: ['#e60000', '#FFD700', '#ffffff'], zIndex: 200 };
+                confetti({ ...o, particleCount: 120, spread: 80, origin: { y: 0.35 } });
+                setTimeout(() => { confetti({ ...o, particleCount: 80, angle: 60, spread: 60, origin: { x: 0, y: 0.6 } }); confetti({ ...o, particleCount: 80, angle: 120, spread: 60, origin: { x: 1, y: 0.6 } }); }, 400);
+            }
+        }
+
+        // --- AUTHENTICATION & UI LOGIC ---
+        if (firebaseConfig) {
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            const loginModal = document.getElementById('login-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+            const unlockVipBtn = document.getElementById('unlock-vip-btn');
+            const topLoginBtn = document.getElementById('top-login-btn');
+            const topProfileCard = document.getElementById('top-profile-card');
+            const loginForm = document.getElementById('login-form');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            const lockedView = document.getElementById('locked-view');
+            const unlockedView = document.getElementById('unlocked-view');
+
+            let currentUserProfile = null;
+
+            const showModal = () => { loginModal.classList.remove('hidden'); loginModal.classList.add('flex'); };
+            const hideModal = () => { loginModal.classList.add('hidden'); loginModal.classList.remove('flex'); };
+            
+            closeBtn.addEventListener('click', hideModal);
+            unlockVipBtn.addEventListener('click', showModal);
+            topLoginBtn.addEventListener('click', showModal);
+
+            const updateUI = () => {
+                if (currentUserProfile) {
+                    topLoginBtn.classList.add('hidden');
+                    topProfileCard.classList.remove('hidden');
+                    document.getElementById('profile-name-display').innerText = currentUserProfile.name;
+                    document.getElementById('profile-city-display').innerText = currentUserProfile.city;
+                    setDashProfile(currentUserProfile);
+                    
+                    lockedView.classList.add('hidden');
+                    lockedView.classList.remove('flex');
+                    unlockedView.classList.remove('hidden');
+                    unlockedView.classList.add('flex');
+                } else {
+                    topLoginBtn.classList.remove('hidden');
+                    setDashProfile(null);
+                    topProfileCard.classList.add('hidden');
+                    
+                    lockedView.classList.remove('hidden');
+                    lockedView.classList.add('flex');
+                    unlockedView.classList.add('hidden');
+                    unlockedView.classList.remove('flex');
+                }
+            };
+
+            const ensureAuth = async () => {
+                if (!auth.currentUser) {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                }
+            };
+
+            // Background Auto-login Check
+            onAuthStateChanged(auth, async (user) => {
+                if (!user) return;
+                // Fetch user's linked phone number from their private setting
+                const linkRef = doc(db, 'artifacts', appId, 'users', user.uid, 'settings', 'profileLink');
+                const linkSnap = await getDoc(linkRef);
+                
+                if (linkSnap.exists()) {
+                    const phone = linkSnap.data().phone;
+                    // Load the public profile matching that phone number
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'userProfiles', phone);
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        currentUserProfile = docSnap.data();
+                        updateUI();
+                    }
+                }
+            });
+
+            // Handle Login / Registration
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('submit-login-btn');
+                const originalText = btn.innerText;
+                btn.innerText = 'SAVING...';
+                btn.disabled = true;
+
+                const name = document.getElementById('user-name').value.trim();
+                const phone = document.getElementById('user-phone').value.trim();
+                const city = document.getElementById('user-city').value.trim();
+
+                try {
+                    await ensureAuth();
+                    if (!auth.currentUser) throw new Error("Auth failed");
+
+                    // 1. Cross-device profile document mapping (Phone -> Data)
+                    const publicProfileRef = doc(db, 'artifacts', appId, 'public', 'data', 'userProfiles', phone);
+                    const docSnap = await getDoc(publicProfileRef);
+                    
+                    const dob = document.getElementById('user-dob').value;
+                    const now = new Date().toISOString();
+                    let profileData = { name, phone, city, dob, joined: now, lastLogin: now };
+                    
+                    if (docSnap.exists()) {
+                        // User exists, update lastLogin and sync info
+                        profileData = { ...docSnap.data(), name, city, dob, joined: docSnap.data().joined || now, lastLogin: now };
+                    }
+                    
+                    await setDoc(publicProfileRef, profileData);
+                    
+                    // 2. Private mapping for background auto-login across sessions
+                    const privateLinkRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'settings', 'profileLink');
+                    await setDoc(privateLinkRef, { phone });
+                    
+                    currentUserProfile = profileData;
+                    hideModal();
+                    updateUI();
+                    loginForm.reset();
+                    registerVisit(profileData);
+                    openDashboard();
+                    
+                } catch (error) {
+                    console.error("Error saving profile:", error);
+                    btn.innerText = 'ERROR, RETRY';
+                    setTimeout(() => { btn.innerText = originalText; }, 3000);
+                } finally {
+                    if(btn.innerText === 'SAVING...') btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            });
+
+            logoutBtn.addEventListener('click', async () => {
+                currentUserProfile = null;
+                updateUI();
+                
+                // Disconnect private link for this device
+                if(auth.currentUser) {
+                     const privateLinkRef = doc(db, 'artifacts', appId, 'users', auth.currentUser.uid, 'settings', 'profileLink');
+                     await setDoc(privateLinkRef, { phone: null });
+                }
+            });
+
+        } else {
+            console.warn("Firebase not configured. Running VIP section in demo mode.");
+            // Demo Mode Fallback
+            const showModal = () => document.getElementById('login-modal').classList.replace('hidden', 'flex');
+            const hideModal = () => document.getElementById('login-modal').classList.replace('flex', 'hidden');
+            
+            document.getElementById('close-modal-btn').addEventListener('click', hideModal);
+            document.getElementById('unlock-vip-btn').addEventListener('click', showModal);
+            document.getElementById('top-login-btn').addEventListener('click', showModal);
+
+            const showLoggedIn = (p) => {
+                document.getElementById('profile-name-display').innerText = p.name;
+                document.getElementById('profile-city-display').innerText = p.city;
+                document.getElementById('top-login-btn').classList.add('hidden');
+                document.getElementById('top-profile-card').classList.remove('hidden');
+                document.getElementById('locked-view').classList.replace('flex', 'hidden');
+                document.getElementById('unlocked-view').classList.replace('hidden', 'flex');
+                setDashProfile(p);
+            };
+            try { const saved = JSON.parse(localStorage.getItem('jagdishProfile')); if (saved) showLoggedIn(saved); } catch (err) {}
+
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const now = new Date().toISOString();
+                const v = (id) => document.getElementById(id).value.trim();
+                const profile = { name: v('user-name'), phone: v('user-phone'), city: v('user-city'), dob: v('user-dob'), joined: now, lastLogin: now };
+                showLoggedIn(profile);
+                try { localStorage.setItem('jagdishProfile', JSON.stringify(profile)); } catch (err) {}
+                hideModal();
+                e.target.reset();
+                registerVisit(profile);
+                openDashboard();
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                document.getElementById('top-login-btn').classList.remove('hidden');
+                document.getElementById('top-profile-card').classList.add('hidden');
+                document.getElementById('locked-view').classList.replace('hidden', 'flex');
+                document.getElementById('unlocked-view').classList.replace('flex', 'hidden');
+                setDashProfile(null);
+                try { localStorage.removeItem('jagdishProfile'); } catch (err) {}
+            });
+        }
+    </script>
+</body>
+</html>
